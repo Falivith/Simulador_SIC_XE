@@ -7,24 +7,36 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.simulador_sic_xe.Controller">
    <children>
       <TextArea fx:id="assemblyTextArea" layoutX="21.0" layoutY="52.0" prefHeight="330.0" prefWidth="154.0" />
       <Label alignment="CENTER" layoutX="33.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Assembly SIC/XE" />
       <TextArea fx:id="objectTextArea" layoutX="200.0" layoutY="52.0" prefHeight="330.0" prefWidth="154.0" />
       <Label alignment="CENTER" layoutX="212.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Código Objeto SIC/XE" />
-      <TableView fx:id="tableViewMemory" layoutX="379.0" layoutY="52.0" prefHeight="330.0" prefWidth="304.0">
+      <TableView fx:id="tableViewMemory" layoutX="410.0" layoutY="52.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="436.0" prefWidth="520.0">
         <columns>
-          <TableColumn fx:id="tableColumn0" prefWidth="75.0" text="0" />
-          <TableColumn fx:id="tableColumn1" prefWidth="75.0" text="1" />
-            <TableColumn fx:id="tableColumn2" prefWidth="75.0" text="2" />
-            <TableColumn fx:id="tableColumn3" prefWidth="75.0" text="3" />
+            <TableColumn fx:id="tableColumnBaseAddress" editable="false" minWidth="-Infinity" prefWidth="50.0" reorderable="false" resizable="false" sortable="false" text="Base" />
+          <TableColumn fx:id="tableColumn0" editable="false" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="0" />
+          <TableColumn fx:id="tableColumn1" editable="false" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="1" />
+            <TableColumn fx:id="tableColumn2" editable="false" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="2" />
+            <TableColumn fx:id="tableColumn3" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="3" />
+            <TableColumn fx:id="tableColumn4" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="4" />
+            <TableColumn fx:id="tableColumn5" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="5" />
+            <TableColumn fx:id="tableColumn6" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="6" />
+            <TableColumn fx:id="tableColumn7" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="7" />
+            <TableColumn fx:id="tableColumn8" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="8" />
+            <TableColumn fx:id="tableColumn9" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="9" />
+            <TableColumn fx:id="tableColumnA" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="A" />
+            <TableColumn fx:id="tableColumnB" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="B" />
+            <TableColumn fx:id="tableColumnC" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="C" />
+            <TableColumn fx:id="tableColumnD" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="D" />
+            <TableColumn fx:id="tableColumnE" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="E" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label alignment="CENTER" layoutX="465.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
-      <Button fx:id="runButton" layoutX="709.0" layoutY="52.0" mnemonicParsing="false" text="Executar" />
+      <Label alignment="CENTER" layoutX="581.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
+      <Button fx:id="runButton" layoutX="681.0" layoutY="22.0" mnemonicParsing="false" text="Executar" />
    </children>
 </AnchorPane>
