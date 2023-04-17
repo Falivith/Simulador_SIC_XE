@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.simulador_sic_xe.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="694.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.simulador_sic_xe.Controller">
    <children>
-      <TextArea fx:id="assemblyTextArea" layoutX="21.0" layoutY="52.0" prefHeight="330.0" prefWidth="154.0" />
-      <Label alignment="CENTER" layoutX="33.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Assembly SIC/XE" />
-      <TextArea fx:id="objectTextArea" layoutX="200.0" layoutY="52.0" prefHeight="330.0" prefWidth="154.0" />
-      <Label alignment="CENTER" layoutX="212.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Código Objeto SIC/XE" />
-      <TableView fx:id="tableViewMemory" layoutX="410.0" layoutY="52.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="436.0" prefWidth="520.0">
+      <TextArea fx:id="assemblyTextArea" layoutX="41.0" layoutY="52.0" prefHeight="330.0" prefWidth="154.0" />
+      <Label alignment="CENTER" layoutX="53.0" layoutY="18.0" prefHeight="34.0" prefWidth="130.0" text="Assembly SIC/XE" />
+      <TextArea fx:id="objectTextArea" layoutX="221.0" layoutY="52.0" prefHeight="330.0" prefWidth="154.0" />
+      <Label alignment="CENTER" layoutX="233.0" layoutY="18.0" prefHeight="34.0" prefWidth="130.0" text="Código Objeto" />
+      <TableView fx:id="tableViewMemory" layoutX="410.0" layoutY="52.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="436.0" prefWidth="505.0">
         <columns>
             <TableColumn fx:id="tableColumnBaseAddress" editable="false" minWidth="-Infinity" prefWidth="50.0" reorderable="false" resizable="false" sortable="false" text="Base" />
           <TableColumn fx:id="tableColumn0" editable="false" minWidth="25.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="0" />
@@ -36,7 +39,127 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label alignment="CENTER" layoutX="581.0" layoutY="17.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
-      <Button fx:id="runButton" layoutX="681.0" layoutY="22.0" mnemonicParsing="false" text="Executar" />
+      <Label alignment="CENTER" layoutX="582.0" layoutY="18.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
+      <Button fx:id="runButton" layoutX="682.0" layoutY="23.0" mnemonicParsing="false" text="Executar" />
+      <Label alignment="CENTER" layoutX="53.0" layoutY="414.0" prefHeight="34.0" prefWidth="130.0" text="Registradores" />
+      <VBox layoutX="41.0" layoutY="448.0" prefHeight="217.0" prefWidth="172.0">
+         <children>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="Acomulador (A) =" />
+                  <Label fx:id="LabelRegisterA" alignment="TOP_LEFT" text="000000">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="Reg. Indice   (X) =" />
+                  <Label fx:id="labelRegisterX" text="000000">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="Reg. Ligação (L) =" />
+                  <Label fx:id="labelRegisterL" text="000000">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="Reg. Base     (B) =" />
+                  <Label fx:id="labelRegisterB" text="000000">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="Geral_1         (T) =" />
+                  <Label fx:id="labelRegisterS" text="000000">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="Geral_2         (T) =" />
+                  <Label fx:id="labelRegisterT" text="000000">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
+               <children>
+                  <Label text="P. Counter (PC) = " />
+                  <Label fx:id="labelRegisterPC" text="000000">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

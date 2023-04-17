@@ -22,23 +22,14 @@ public class Controller implements Initializable , Memory.MemoryListener {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         System.out.println("Starting...");
-        memory = new Memory(1024);
-
+        memory = new Memory(256);
         loadMemoryView();
         memory.addListener(this);
-
         runButton.setOnAction(e -> runButtonClick());
     }
 
     private void runButtonClick() {
         memory.write(10, (byte) 0b00001110);
-    }
-
-    private void memoryWriteInterface(int address, byte value){
-        Memory16Row temporary16Row = ListRows.get(address / 16);
-        temporary16Row.hexValues[address % 16] = String.format("%02x", value);
-        ListRows.set((address / 16), temporary16Row);
-        tableViewMemory.refresh();
     }
 
     public void loadMemoryView(){
@@ -65,14 +56,12 @@ public class Controller implements Initializable , Memory.MemoryListener {
             tableColumnE.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[14]));
         }
 
+        int size = memory.getSize();
+
         byte[] buffer = new byte[16];
         int count = 0;
 
-        /*for(int i = 0; i < 256; i++){
-            memory.write(i, (byte) (i % 256));
-        }*/
-
-        for(int i = 0; i < 16; i++){
+        for(int i = 0; i < size/16; i++){
             int current_collection = i * 16;
 
             for(int j = current_collection; j < current_collection + 16; j++){
@@ -88,6 +77,26 @@ public class Controller implements Initializable , Memory.MemoryListener {
         tableViewMemory.setItems(ObservableListRow);
     }
 
+    @FXML
+    private Label LabelRegisterA;
+
+    @FXML
+    private Label labelRegisterB;
+
+    @FXML
+    private Label labelRegisterL;
+
+    @FXML
+    private Label labelRegisterPC;
+
+    @FXML
+    private Label labelRegisterS;
+
+    @FXML
+    private Label labelRegisterT;
+
+    @FXML
+    private Label labelRegisterX;
     @FXML
     private TextArea assemblyTextArea;
 
@@ -148,11 +157,19 @@ public class Controller implements Initializable , Memory.MemoryListener {
     @FXML
     private TableView<Memory16Row> tableViewMemory;
 
+    // Métodos para atualizar a tabela conforme a memória for atualizada.
+    private void memoryWriteInterface(int address, byte value){
+        Memory16Row temporary16Row = ListRows.get(address / 16);
+        temporary16Row.hexValues[address % 16] = String.format("%02x", value);
+        ListRows.set((address / 16), temporary16Row);
+        tableViewMemory.refresh();
+    }
     public void onMemoryWrite(int address, byte value) {
         memoryWriteInterface(address, value);
     }
 }
 
+// Classe que representa uma linha da tabela da memória. É uma gambiarra, mas funciona.
 class Memory16Row {
     String baseAddress;
     String[] hexValues;
@@ -161,7 +178,6 @@ class Memory16Row {
         this.baseAddress = String.format("%05x", baseAddress);
         hexValues = new String[16];
         for (int i = 0; i < byteArray.length; i++) {
-            System.out.println(String.format("%02x", byteArray[i]));
             hexValues[i] = String.format("%02x", byteArray[i]);
         }
     }
