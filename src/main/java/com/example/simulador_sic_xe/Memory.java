@@ -39,10 +39,6 @@ public class Memory {
         listeners.add(listener);
     }
 
-    public void removeListener(MemoryListener listener) {
-        listeners.remove(listener);
-    }
-
     private void fireMemoryWrite(int address, byte value) {
         for (MemoryListener listener : listeners) {
             listener.onMemoryWrite(address, value);

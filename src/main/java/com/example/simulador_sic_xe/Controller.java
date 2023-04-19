@@ -12,10 +12,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable , Memory.MemoryListener {
+public class Controller implements Initializable , Memory.MemoryListener, Registers.RegistersListener {
 
     private Processor processor;
     private Memory memory;
+    private Registers registers;
+
     ArrayList<Memory16Row> ListRows = new ArrayList<>();
     ObservableList<Memory16Row> ObservableListRow;
 
@@ -23,13 +25,21 @@ public class Controller implements Initializable , Memory.MemoryListener {
     public void initialize(URL url, ResourceBundle rb){
         System.out.println("Starting...");
         memory = new Memory(256);
-        loadMemoryView();
+        registers = new Registers();
         memory.addListener(this);
+        registers.addListener(this);
+
+        Loaded program = Reader.readObjectCode("src/src.o");
+
+        loadMemoryView();
+
         runButton.setOnAction(e -> runButtonClick());
     }
 
     private void runButtonClick() {
         memory.write(10, (byte) 0b00001110);
+        registers.setB(130);
+        registers.setA(150);
     }
 
     public void loadMemoryView(){
@@ -38,7 +48,6 @@ public class Controller implements Initializable , Memory.MemoryListener {
 
         {
             tableColumnBaseAddress.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().baseAddress));
-
             tableColumn0.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[0]));
             tableColumn1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[1]));
             tableColumn2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[2]));
@@ -78,84 +87,15 @@ public class Controller implements Initializable , Memory.MemoryListener {
     }
 
     @FXML
-    private Label LabelRegisterA;
-
-    @FXML
-    private Label labelRegisterB;
-
-    @FXML
-    private Label labelRegisterL;
-
-    @FXML
-    private Label labelRegisterPC;
-
-    @FXML
-    private Label labelRegisterS;
-
-    @FXML
-    private Label labelRegisterT;
-
-    @FXML
-    private Label labelRegisterX;
-    @FXML
-    private TextArea assemblyTextArea;
-
-    @FXML
-    private TextArea objectTextArea;
-
-    @FXML
-    private Button runButton;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumnBaseAddress;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn0;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn1;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn2;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn3;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn4;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn5;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn6;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn7;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn8;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumn9;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumnA;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumnB;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumnC;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumnD;
-
-    @FXML
-    private TableColumn<Memory16Row, String> tableColumnE;
-
-    @FXML
-    private TableView<Memory16Row> tableViewMemory;
+    private ListView<?> assemblyListView;
+    @FXML private Label labelRegisterA, labelRegisterB, labelRegisterL, labelRegisterPC, labelRegisterS, labelRegisterT,
+            labelRegisterX, labelRegisterSW;
+    @FXML private TextArea objectTextArea;
+    @FXML private Button runButton;
+    @FXML private TableColumn<Memory16Row, String> tableColumnBaseAddress, tableColumn0, tableColumn1, tableColumn2,
+            tableColumn3, tableColumn4, tableColumn5, tableColumn6, tableColumn7, tableColumn8, tableColumn9,
+            tableColumnA, tableColumnB, tableColumnC, tableColumnD, tableColumnE;
+    @FXML private TableView<Memory16Row> tableViewMemory;
 
     // Métodos para atualizar a tabela conforme a memória for atualizada.
     private void memoryWriteInterface(int address, byte value){
@@ -166,6 +106,17 @@ public class Controller implements Initializable , Memory.MemoryListener {
     }
     public void onMemoryWrite(int address, byte value) {
         memoryWriteInterface(address, value);
+    }
+
+    public void onRegistersChange(Registers registers){
+        labelRegisterA.setText(String.format("%06x", registers.getA()));
+        labelRegisterB.setText(String.format("%06x", registers.getB()));
+        labelRegisterL.setText(String.format("%06x", registers.getL()));
+        labelRegisterPC.setText(String.format("%06x", registers.getPC()));
+        labelRegisterSW.setText(String.format("%06x", registers.getSW()));
+        labelRegisterT.setText(String.format("%06x", registers.getT()));
+        labelRegisterX.setText(String.format("%06x", registers.getX()));
+        labelRegisterS.setText(String.format("%06x", registers.getS()));
     }
 }
 
