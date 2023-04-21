@@ -3,112 +3,128 @@ package com.example.simulador_sic_xe;
 import java.util.ArrayList;
 import java.util.List;
 
+class Register {
+    int value;
+
+    Register(){
+        value = 0;
+    }
+
+    void setValue(int v){
+        value = v;
+    }
+
+    int getValue(){
+        return value;
+    }
+}
+
 public class Registers {
-    private int A; // Acumulador
-    private int X; // Registrador de índice
-    private int L; // Registrador de ligação
-    private int B; // Registrador Base
-    private int S; // Registrador de uso geral
-    private int T; // Registrador de uso geral
-    private int PC; // Contador de Instruções (Program Counter)
-    private int SW; // Palavra de status
+    private Register A; // Acumulador
+    private Register X; // Registrador de índice
+    private Register L; // Registrador de ligação
+    private Register B; // Registrador Base
+    private Register S; // Registrador de uso geral
+    private Register T; // Registrador de uso geral
+    private Register PC; // Contador de Instruções (Program Counter)
+    private Register SW; // Palavra de status
 
     private List<RegistersListener> listeners;
 
     public Registers() {
         // inicializa os registradores com valor 0
-        this.A = 0;
-        this.X = 0;
-        this.L = 0;
-        this.B = 0;
-        this.S = 0;
-        this.T = 0;
-        this.PC = 0;
-        this.SW = 0;
+        this.A = new Register();
+        this.X = new Register();
+        this.L = new Register();
+        this.B = new Register();
+        this.S = new Register();
+        this.T = new Register();
+        this.PC = new Register();
+        this.SW = new Register();
         listeners = new ArrayList<>();
     }
 
-    public int getA() {
+    public Register getA() {
         return A;
     }
 
-    public int getX() {
+    public Register getX() {
         return X;
     }
 
-    public int getL() {
+    public Register getL() {
         return L;
     }
 
-    public int getB() {
+    public Register getB() {
         return B;
     }
 
-    public int getS() {
+    public Register getS() {
         return S;
     }
 
-    public int getT() {
+    public Register getT() {
         return T;
     }
 
-    public int getPC() {
+    public Register getPC() {
         return PC;
     }
 
-    public int getSW() {
+    public Register getSW() {
         return SW;
     }
 
     public void setA(int a) {
-        this.A = a;
+        this.A.setValue(a);
         notifyListeners();
     }
 
     public void setX(int x) {
-        this.X = x;
+        this.X.setValue(x);
         notifyListeners();
     }
 
     public void setL(int l) {
-        this.L = l;
+        this.L.setValue(l);
         notifyListeners();
     }
 
     public void setB(int b) {
-        this.B = b;
+        this.B.setValue(b);
         notifyListeners();
     }
 
     public void setS(int s) {
-        this.S = s;
+        this.S.setValue(s);
         notifyListeners();
     }
 
     public void setT(int t) {
-        this.T = t;
+        this.T.setValue(t);
         notifyListeners();
     }
 
     public void setPC(int pc) {
-        this.PC = pc;
+        this.PC.setValue(pc);
         notifyListeners();
     }
 
     public void setSW(int sw) {
-        this.SW = sw;
+        this.SW.setValue(sw);
         notifyListeners();
     }
 
     public void reset(){
-        this.A = 0;
-        this.X = 0;
-        this.L = 0;
-        this.B = 0;
-        this.S = 0;
-        this.T = 0;
-        this.PC = 0;
-        this.SW = 0;
+        this.A.setValue(0);
+        this.X.setValue(0);
+        this.L.setValue(0);
+        this.B.setValue(0);
+        this.S.setValue(0);
+        this.T.setValue(0);
+        this.PC.setValue(0);
+        this.SW.setValue(0);
     }
 
     public interface RegistersListener {

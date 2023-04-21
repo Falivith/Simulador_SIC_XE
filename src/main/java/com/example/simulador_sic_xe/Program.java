@@ -1,7 +1,7 @@
 package com.example.simulador_sic_xe;
 
 public class Program {
-    public static void add(Registers registers, Memory memory, int address) {
+    /*public static void add(Registers registers, Memory memory, int address) {
         registers.setA(registers.getA() + (int) memory.read(address));
         System.out.println("(ADD) Valor REG A: " + registers.getA());
     }
@@ -107,5 +107,5 @@ public class Program {
             }
         }
         return null;
-    }
+    }*/
 }

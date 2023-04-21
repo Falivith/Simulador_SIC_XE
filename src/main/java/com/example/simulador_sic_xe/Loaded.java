@@ -5,13 +5,13 @@ package com.example.simulador_sic_xe;
 import java.util.List;
 
 class Loaded {
-    private String startingAddress;
-    private String programSize;
+    private int startingAddress;
+    private int programSize;
     private int instructions_number;
     private List<Instruction> instructions;
     private String program_name;
 
-    Loaded (String startAddr, String progSize, String program_name, int instrNumber, List<Instruction> instructions) {
+    Loaded (int startAddr, int progSize, String program_name, int instrNumber, List<Instruction> instructions) {
         this.startingAddress = startAddr;
         this.programSize = progSize;
         this.instructions_number = instrNumber;
@@ -19,19 +19,19 @@ class Loaded {
         this.program_name = program_name;
     }
 
-    public String getStartingAddress() {
+    public int getStartingAddress() {
         return startingAddress;
     }
 
-    public void setStartingAddress(String startingAddress) {
+    public void setStartingAddress(int startingAddress) {
         this.startingAddress = startingAddress;
     }
 
-    public String getProgramSize() {
+    public int getProgramSize() {
         return programSize;
     }
 
-    public void setProgramSize(String programSize) {
+    public void setProgramSize(int programSize) {
         this.programSize = programSize;
     }
 

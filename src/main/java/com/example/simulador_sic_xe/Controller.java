@@ -23,23 +23,31 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        System.out.println("Starting...");
+
         memory = new Memory(256);
         registers = new Registers();
         memory.addListener(this);
         registers.addListener(this);
+        Processor processor = new Processor(memory, registers);
 
-        Loaded program = Reader.readObjectCode("src/src.o");
+        Loaded x = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_1.asm");
+        System.out.println("");
 
         loadMemoryView();
-
         runButton.setOnAction(e -> runButtonClick());
+
     }
 
     private void runButtonClick() {
         memory.write(10, (byte) 0b00001110);
-        registers.setB(130);
+
         registers.setA(150);
+
+        Instructions.ADDR(registers.getB(), registers.getA());
+
+        System.out.println(registers.getA().getValue());
+
+        System.out.println("Perochons");
     }
 
     public void loadMemoryView(){
@@ -109,14 +117,14 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
     }
 
     public void onRegistersChange(Registers registers){
-        labelRegisterA.setText(String.format("%06x", registers.getA()));
-        labelRegisterB.setText(String.format("%06x", registers.getB()));
-        labelRegisterL.setText(String.format("%06x", registers.getL()));
-        labelRegisterPC.setText(String.format("%06x", registers.getPC()));
-        labelRegisterSW.setText(String.format("%06x", registers.getSW()));
-        labelRegisterT.setText(String.format("%06x", registers.getT()));
-        labelRegisterX.setText(String.format("%06x", registers.getX()));
-        labelRegisterS.setText(String.format("%06x", registers.getS()));
+        labelRegisterA.setText(String.format("%06x", registers.getA().getValue()));
+        labelRegisterB.setText(String.format("%06x", registers.getB().getValue()));
+        labelRegisterL.setText(String.format("%06x", registers.getL().getValue()));
+        labelRegisterPC.setText(String.format("%06x", registers.getPC().getValue()));
+        labelRegisterSW.setText(String.format("%06x", registers.getSW().getValue()));
+        labelRegisterT.setText(String.format("%06x", registers.getT().getValue()));
+        labelRegisterX.setText(String.format("%06x", registers.getX().getValue()));
+        labelRegisterS.setText(String.format("%06x", registers.getS().getValue()));
     }
 }
 
