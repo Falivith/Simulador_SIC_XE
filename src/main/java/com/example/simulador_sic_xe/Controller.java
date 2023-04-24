@@ -40,8 +40,10 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
 
     private void runButtonClick() {
         memory.write(10, (byte) 0b00001110);
+        memory.write(1, (byte) 0b00000011);
 
         registers.setA(150);
+        registers.setPC(memory.read(1));
 
         Instructions.ADDR(registers.getB(), registers.getA());
 
