@@ -82,18 +82,8 @@ public class Assembler {
             // Tabela de Instruções
 
             boolean extendedFlag = actual.OpCode.startsWith("+");
-
             if (extendedFlag) {
-                actual.OpCode.substring(1); // Retira o "+" da instrução pra não haver confusão na tabela de instruções abaixo.
-                LOCCTR += 4;
-                actual.Format = 4;
-            }else if(instructionMap.get(actual.OpCode).get(1).contains("2")){
-                LOCCTR += 2;
-                actual.Format = 2;
-            }
-            else{
-                LOCCTR += 3;
-                actual.Format = 3;
+                actual.OpCode = actual.OpCode.substring(1); // Retira o "+" da instrução pra não haver confusão na tabela de instruções abaixo.
             }
 
             if(instructionMap.containsKey(actual.OpCode)){
@@ -101,18 +91,28 @@ public class Assembler {
                 actual.AddressingMode = "Direct";
 
                 if(actual.Operand.startsWith("#")){
-                    System.out.println(actual.OpCode + " Endereçamento Imediato ");
                     actual.AddressingMode = "Immediate";
                 }
 
                 if(actual.Operand.endsWith(",X")){
-                    System.out.println(actual.OpCode + " Endereçamento Indexado ");
                     actual.AddressingMode = "Indexed";
                 }
 
                 if (actual.Operand.startsWith("@")) {
-                    System.out.println(actual.OpCode + " Endereçamento Indireto ");
                     actual.AddressingMode = "Indirect";
+                }
+
+                if(extendedFlag) {
+                    LOCCTR += 4;
+                    actual.Format = 4;
+                }
+                else if(instructionMap.get(actual.OpCode).get(1).contains("2")){
+                    LOCCTR += 2;
+                    actual.Format = 2;
+                }
+                else{
+                    LOCCTR += 3;
+                    actual.Format = 3;
                 }
             }
             else if(actual.OpCode.equals("WORD")){
@@ -133,10 +133,12 @@ public class Assembler {
                 return null;
             }
 
+            program.add(actual);
             actual = wordSplit(assembly.get(++iterator));
             actual.LOCCTR = LOCCTR;
-            program.add(actual);
         }
+
+        printProgram(program);
 
         // Fim do programa (Gambiarra) =)
         LineDecode end = new LineDecode();
@@ -150,7 +152,26 @@ public class Assembler {
         String objCode = "";
 
         for (LineDecode line : program) {
-            String hexCode = "";
+
+            String hexCode = null;
+            // Caso onde o OPCODE foi encontrado na tabela de instruções
+            if(instructionMap.get(line.OpCode) != null){
+                hexCode = instructionMap.get(line.OpCode).get(0);
+                // Verificação se o OPERANDO é NULO ou EXISTE
+                if(line.Operand != null){
+                    if(symbolTable.containsKey(line.Operand)){
+                        hexCode += String.format("%04X", symbolTable.get(actual.Operand));
+                    }
+                }
+                else
+                    System.out.println(line.OpCode + " Não existe Operando.");
+            }
+            // Caso seja diretiva Word
+            else if(line.OpCode.equals("WORD")){
+                hexCode = String.format("%06X", symbolTable.get(line.Operand));
+            }
+
+            objCode += hexCode + "\n";
         }
 
         /*
@@ -181,7 +202,7 @@ public class Assembler {
         }
         */
         
-        System.out.println(objCode);
+        //System.out.println(objCode);
         writeObjCodeToFile(objCode);
 
         return decodedProgram = new Loaded(START, 0, PNAME, (objCode.split("\n").length - 1), null);
@@ -290,4 +311,12 @@ public class Assembler {
         return line;
     }
 
+    public static void printProgram(List<LineDecode> program){
+        for (LineDecode line: program) {
+            System.out.println(
+                    "LOCCTR: " + String.format("%06X", (line.LOCCTR))
+          + " | " + "OPCODE: " + String.format("%-5s", line.OpCode)
+          + " | " + "OPERAN: " + String.format("%-5s", line.Operand));
+        }
+    }
 }
