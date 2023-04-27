@@ -1,39 +1,53 @@
 package com.example.simulador_sic_xe;
 
+import javafx.scene.shape.Line;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
-class lineDecode{
+class LineDecode {
     int LOCCTR;
+    int Format;
     String Label;
     String OpCode;
     String Operand;
+    String AddressingMode;
+    String ObjectCode;
 }
+
 public class Assembler {
     public static Loaded assemble(String asmPath) {
         System.out.println("-- Abrindo arquivo Assembly SIC/XE -- ");
 
-        Loaded decodedProgram = null;
-
-        HashMap<String, String> instructionMap = createInstructionMap("src/main/java/com/example/simulador_sic_xe/samplecodes/instructions.txt");
+        HashMap<String, List<String>> instructionMap = createInstructionMap("src/main/java/com/example/simulador_sic_xe/samplecodes/instructions.txt");
         HashMap<String, Integer> symbolTable = new HashMap<>();
         ArrayList<String> assembly = asmReader(asmPath);
-        ArrayList<lineDecode> intermediate = new ArrayList<>();
 
         int START = 0;
         int PSIZE;
         int LOCCTR;
         String PNAME = null;
 
-        // Define o cabeçalho do programa
+        /* Estruturas que vão user usadas pela VM pra code highlighting
+        *  Essas estruturas estão presentes no montador porque a interface
+        *  Precisa ter acesso ao código assembly fonte. */
+
+        Loaded decodedProgram = new Loaded();
+        ArrayList<LineDecode> program = new ArrayList<>();
+
+        /*
+        * Estava utilizando o formato utilizando header, text e end
+        * mas mudei devido a complicações no desenvolvimento.
+        * */
 
         if(assembly.get(0).contains("START")){
             System.out.println("-- Montando o cabeçalho --");
 
-            lineDecode Buffer = wordSplit(assembly.get(0));
+            LineDecode Buffer = wordSplit(assembly.get(0));
             START = Integer.parseInt(Buffer.Operand, 16);
             LOCCTR = START;
             symbolTable.put(Buffer.Label, LOCCTR);
@@ -47,14 +61,13 @@ public class Assembler {
         // Definição dos buffers e iteradores para cada linha do Assembly
 
         int iterator = 1;
-        lineDecode actual = wordSplit(assembly.get(iterator));
-        intermediate.add(actual);
+        LineDecode actual = wordSplit(assembly.get(iterator));
 
         // Passo 1 da montagem
 
         while( !actual.OpCode.equals("END") ){
 
-            System.out.println("LOCCTR: " + String.format("%06X", LOCCTR) + " " + actual.Label + " " + actual.OpCode + " " + actual.Operand);
+            //System.out.println("LOCCTR: " + String.format("%06X", LOCCTR) + " " + actual.Label + " " + actual.OpCode + " " + actual.Operand);
 
             // Tabela de símbolos
 
@@ -68,10 +81,42 @@ public class Assembler {
 
             // Tabela de Instruções
 
-            if(instructionMap.containsKey(actual.OpCode)){
+            boolean extendedFlag = actual.OpCode.startsWith("+");
+
+            if (extendedFlag) {
+                actual.OpCode.substring(1); // Retira o "+" da instrução pra não haver confusão na tabela de instruções abaixo.
+                LOCCTR += 4;
+                actual.Format = 4;
+            }else if(instructionMap.get(actual.OpCode).get(1).contains("2")){
+                LOCCTR += 2;
+                actual.Format = 2;
+            }
+            else{
                 LOCCTR += 3;
+                actual.Format = 3;
+            }
+
+            if(instructionMap.containsKey(actual.OpCode)){
+
+                actual.AddressingMode = "Direct";
+
+                if(actual.Operand.startsWith("#")){
+                    System.out.println(actual.OpCode + " Endereçamento Imediato ");
+                    actual.AddressingMode = "Immediate";
+                }
+
+                if(actual.Operand.endsWith(",X")){
+                    System.out.println(actual.OpCode + " Endereçamento Indexado ");
+                    actual.AddressingMode = "Indexed";
+                }
+
+                if (actual.Operand.startsWith("@")) {
+                    System.out.println(actual.OpCode + " Endereçamento Indireto ");
+                    actual.AddressingMode = "Indirect";
+                }
             }
             else if(actual.OpCode.equals("WORD")){
+                actual.ObjectCode = String.format("%06X", Integer.parseInt(actual.Operand));
                 LOCCTR += 3;
             }
             else if(actual.OpCode.equals("RESW")){
@@ -90,8 +135,13 @@ public class Assembler {
 
             actual = wordSplit(assembly.get(++iterator));
             actual.LOCCTR = LOCCTR;
-            intermediate.add(actual);
+            program.add(actual);
         }
+
+        // Fim do programa (Gambiarra) =)
+        LineDecode end = new LineDecode();
+        end.OpCode = "FF";
+        program.add(end);
 
         // Passo 2 da montagem
 
@@ -99,6 +149,11 @@ public class Assembler {
         actual = wordSplit(assembly.get(iterator));
         String objCode = "";
 
+        for (LineDecode line : program) {
+            String hexCode = "";
+        }
+
+        /*
         while (!actual.OpCode.equals("END")) {
 
             String hexCode = null;
@@ -106,7 +161,7 @@ public class Assembler {
             // Se temos um OPCODE ou uma Diretiva de montador
             if (instructionMap.containsKey(actual.OpCode)) {
 
-                String hexOpCode = instructionMap.get(actual.OpCode);
+                String hexOpCode = instructionMap.get(actual.OpCode).get(0);
                 int tempOperand = 0;
 
                 // Se temos um operando
@@ -124,7 +179,8 @@ public class Assembler {
             actual = wordSplit(assembly.get(++iterator));
             LOCCTR += 3;
         }
-
+        */
+        
         System.out.println(objCode);
         writeObjCodeToFile(objCode);
 
@@ -180,9 +236,9 @@ public class Assembler {
             System.out.println(instrucao + " = " + String.format("%06X", SymTab.get(instrucao)));
     }
 
-    public static HashMap<String, String> createInstructionMap(String path) {
+    public static HashMap<String, List<String>> createInstructionMap(String path) {
         File file = new File(path);
-        HashMap<String, String> mapa = new HashMap<>();
+        HashMap<String, List<String>> mapa = new HashMap<>();
 
         try {
 
@@ -191,11 +247,15 @@ public class Assembler {
             while (leitor.hasNextLine()) {
                 String linha = leitor.nextLine();
 
-                // divide a linha em duas partes: instrução e código
+                // divide a linha em duas partes: instrução, código e formato
                 String[] partes = linha.split(" ");
 
+                List<String> x = new ArrayList<>();
+                x.add(partes[1]);
+                x.add(partes[2]);
+
                 // adiciona a instrução e seu código ao HashMap
-                mapa.put(partes[0], partes[1]);
+                mapa.put(partes[0], x);
             }
 
             leitor.close();
@@ -207,10 +267,10 @@ public class Assembler {
         return mapa;
     }
 
-    public static lineDecode wordSplit(String codeLine) {
+    public static LineDecode wordSplit(String codeLine) {
         codeLine = codeLine.trim();
         String[] words = codeLine.split("\\s+"); // separa as palavras pelo espaço em branco
-        lineDecode line = new lineDecode();
+        LineDecode line = new LineDecode();
 
         switch(words.length){
             case 1:
@@ -229,4 +289,5 @@ public class Assembler {
 
         return line;
     }
+
 }

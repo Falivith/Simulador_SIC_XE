@@ -30,7 +30,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         registers.addListener(this);
         Processor processor = new Processor(memory, registers);
 
-        Loaded x = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_1.asm");
+        Loaded x = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_3.asm");
         System.out.println("");
 
         loadMemoryView();

@@ -19,6 +19,10 @@ class Loaded {
         this.program_name = program_name;
     }
 
+    Loaded (){
+
+    }
+
     public int getStartingAddress() {
         return startingAddress;
     }

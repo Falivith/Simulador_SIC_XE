@@ -2,7 +2,7 @@ INCR    START   0
         LDA     ZERO
 LOOP    ADD     ONE
         COMP    MAX
-        JEQ     ENDLOOP
+        JEQ     END
         J       LOOP
 ONE     BYTE    1
 MAX     BYTE    100
