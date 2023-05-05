@@ -8,7 +8,7 @@ O projeto possui as seguintes funcionalidades:
 
 - Máquina virtual que interpreta e executa códigos em assembly;
 - Montador que converte códigos em assembly para o formato executável da máquina virtual;
-- Suporte para as principais instruções e diretivas da linguagem assembly.
+- Suporte para as principais instruções e diretivas da linguagem assembly da arquitetura SIC Extended (SIC_XE).
 
 ## Instruções de uso
 
@@ -16,16 +16,15 @@ Para utilizar o projeto, siga as instruções abaixo:
 
 1. Faça o clone do repositório em sua máquina local.
 2. Abra o terminal e navegue até o diretório do projeto.
-3. Compile o código-fonte do montador e da máquina virtual.
-4. Execute o montador para gerar o arquivo executável correspondente ao código em assembly.
-5. Execute a máquina virtual com o arquivo executável gerado como entrada.
+3. Compile o código-fonte em Java.
+4. Execite a máquina virtual usando de entrada seu arquivo em Assembly SIC_XE.
 
 ## Colaboradores
         
 <table align="center">
     <tr>
     <td align="center">
-      <a href="https://github.com/CeciliaBotelho"><img src="https://media.licdn.com/dms/image/D4D03AQFlApRizDnZkw/profile-displayphoto-shrink_800_800/0/1671571403564?e=1684972800&v=beta&t=hn8q_6gJzU9EEoDn4mJpSimn-_p9YUfQTgNHO9BXCi4" alt="Foto do perfil" width="100" height="100"></a>
+      <a href="https://github.com/CeciliaBotelho"><img src="https://media.licdn.com/dms/image/D5603AQHNEiQQ2x8h9w/profile-displayphoto-shrink_800_800/0/1681397716975?e=1688601600&v=beta&t=r8PaIzP_gzWlItWiLcdhzDOgHIn7-Nl2T27_9a3_pGk" alt="Foto do perfil" width="100" height="100"></a>
       <h3><a href="https://github.com/CeciliaBotelho">Cecilia Botelho</a></h3>
     </td>
     <td align="center">
