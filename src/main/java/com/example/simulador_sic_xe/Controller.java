@@ -10,6 +10,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable , Memory.MemoryListener, Registers.RegistersListener {
@@ -30,6 +32,8 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         registers.addListener(this);
 
         Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_5.asm");
+        fillAssembly(pInfo.getAssembly());
+        fillObjCode((pInfo.getObjCode()));
         loadMemoryView();
 
         runButton.setOnAction(e -> runButtonClick());
@@ -93,10 +97,10 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
     }
 
     @FXML
-    private ListView<?> assemblyListView;
+    private ListView<String> assemblyListView;
     @FXML private Label labelRegisterA, labelRegisterB, labelRegisterL, labelRegisterPC, labelRegisterS, labelRegisterT,
             labelRegisterX, labelRegisterSW;
-    @FXML private TextArea objectTextArea;
+    @FXML private ListView<String> objCodeListView;
     @FXML private Button runButton;
     @FXML private Button stepButton;
     @FXML private TableColumn<Memory16Row, String> tableColumnBaseAddress, tableColumn0, tableColumn1, tableColumn2,
@@ -124,6 +128,18 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         labelRegisterT.setText(String.format("%06x", registers.getT().getValue()));
         labelRegisterX.setText(String.format("%06x", registers.getX().getValue()));
         labelRegisterS.setText(String.format("%06x", registers.getS().getValue()));
+    }
+
+    public void fillAssembly(List<String> asm){
+        for (String string : asm) {
+            assemblyListView.getItems().add(string);
+        }
+    }
+
+    public void fillObjCode(List<String> obj){
+        for (String string : obj) {
+            objCodeListView.getItems().add(string);
+        }
     }
 }
 

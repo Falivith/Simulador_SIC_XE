@@ -1,5 +1,6 @@
 HELP__  START   16
 FIRST   LDA     #10
+        ADD     #10
         LDS     #10
         ADDR    A,S
         CLEAR   A
@@ -7,5 +8,12 @@ FIRST   LDA     #10
         COMPR   A,S
         LDA     #10
         LDS     #10
-        MULR    A,S
-        END     FIRST
+        MULR    S,A
+        SUBR    S,A
+        RMO     A,S
+        SHIFTL  A
+        SHIFTR  A
+        J       FINISH
+ONE     WORD    1
+TWO     BYTE    16
+FINISH  END     FIRST

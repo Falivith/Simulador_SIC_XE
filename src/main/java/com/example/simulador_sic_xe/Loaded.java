@@ -9,18 +9,28 @@ class Loaded {
     private int instructions_number;
     private List<LineDecode> instructions;
     private List<String> objCode;
+    private List<String> assembly;
     private String program_name;
 
-    Loaded (int startAddr, String program_name, int instrNumber, List<LineDecode> instructions, List<String> objCode) {
+    Loaded (int startAddr, String program_name, int instrNumber, List<LineDecode> instructions, List<String> objCode, List<String> asm) {
         this.startingAddress = startAddr;
         this.instructions_number = instrNumber;
         this.instructions = instructions;
         this.program_name = program_name;
         this.objCode = objCode;
+        this.assembly = asm;
     }
 
     Loaded (){
 
+    }
+
+    public List<String> getAssembly() {
+        return assembly;
+    }
+
+    public void setAssembly(List<String> assembly) {
+        this.assembly = assembly;
     }
 
     public List<String> getObjCode() {

@@ -134,7 +134,15 @@ public class Assembler {
             actual.LOCCTR = LOCCTR;
         }
 
-        // Fim do programa (Gambiarra) =)
+        // Fim do programa (Gambiarra para incluir o END e o FINISH) =)
+
+        if(actual.Label != null && !actual.Label.isEmpty()){
+            if(symbolTable.containsKey(actual.Label)){
+                System.out.println("O Símbolo < " + actual.Label + " > já existe na tabela de símbolos.");
+                return null;
+            }
+            symbolTable.put(actual.Label, LOCCTR);
+        }
 
         program.add(actual);
         printProgram(program);
@@ -169,29 +177,19 @@ public class Assembler {
                     break;
                 case 4:
                     break;
+                default:
+                    break;
             }
 
+            // Word
 
-            // Diretivas
-            /*    if(lineObjCode != null)
+            if(line.OpCode.equals("WORD")){
+                lineObjCode = String.format("%06X", Integer.parseInt(line.Operand));
+            }
 
-                if(line.Operand != null){
-                    // Endereçamento Direto
-                    if(symbolTable.containsKey(line.Operand)){
-                        lineObjCode += String.format("%04X", symbolTable.get(actual.Operand));
-                    }
-                    // Endereçamento Imediato
-                    else{
-                        lineObjCode += String.format("%04X", (actual.Operand.substring(1)));
-                    }
-                }
-                else
-                    System.out.println(line.OpCode + " Não existe Operando.");
-
-            // Caso seja diretiva Word
-            else if(line.OpCode.equals("WORD")){
-                lineObjCode = String.format("%06X", symbolTable.get(line.Operand));
-            }*/
+            if(line.OpCode.equals("BYTE")){
+                lineObjCode = String.format("%02X", Integer.parseInt(line.Operand));
+            }
 
             objCodeList.add(lineObjCode);
             objCode += lineObjCode + "\n";
@@ -225,10 +223,13 @@ public class Assembler {
         }
         */
 
-        System.out.println(" -- Código Objeto -- \n" + objCode);
+        System.out.println(" -- Código Objeto -- \n" + objCode + "\n");
+        printSymbolTable(symbolTable);
+        System.out.println();
+
         writeObjCodeToFile(objCode);
 
-        return decodedProgram = new Loaded(START, PNAME, (objCode.split("\n").length - 1), program, objCodeList);
+        return decodedProgram = new Loaded(START, PNAME, (objCode.split("\n").length - 1), program, objCodeList, assembly);
     }
 
     public static ArrayList<String> asmReader(String path){
@@ -365,7 +366,8 @@ public class Assembler {
         }
         // Endereçamento Direto (Padrão)
         else {
-            hexCode += String.format("%04X", (line.Operand));
+            System.out.println(symbolTable.get(line.Operand));
+            hexCode += String.format("%04X", symbolTable.get(line.Operand));
             addressMode = 'D';
         }
 
@@ -387,12 +389,13 @@ public class Assembler {
         return -1;
     }
     public static void loader(Memory memory, Loaded pInfo){
+
         int baseAddress = pInfo.getStartingAddress();
         List<String> objC = pInfo.getObjCode();
 
         for (String line: objC) {
             switch (line.length()){
-                case 2: // Serve apenas pra END
+                case 2: // Serve apenas pra END e BYTE
                     memory.write(baseAddress, (byte) Integer.parseInt(line.substring(0, 2), 16));
                     baseAddress += 1;
                     break;

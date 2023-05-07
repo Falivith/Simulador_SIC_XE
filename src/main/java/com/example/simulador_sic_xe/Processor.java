@@ -65,6 +65,22 @@ public class Processor {
                         byteToTwoInts(BsecondByte);
                         Instructions.MULR(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2));
                         break;
+                    case "SUBR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.SUBR(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2));
+                        break;
+                    case "RMO":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.RMO(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2));
+                        break;
+                    case "SHIFTL":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.SHIFTL(getRegisterFromNumber(registers, r1));
+                        break;
+                    case "SHIFTR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.SHIFTR(getRegisterFromNumber(registers, r1));
+                        break;
                 }
                 break;
             case "3":
@@ -75,6 +91,12 @@ public class Processor {
                     case "LDS":
                         Instructions.LDS(registers, memory, operand, addressingMode);
                         break;
+                    case "ADD":
+                        Instructions.ADD(registers, memory, operand, addressingMode);
+                        break;
+                    case "J":
+                        Instructions.J(registers, memory, operand, addressingMode);
+                        return;
                     case "END":
                         System.out.println("O Programa terminou.");
                         break;
