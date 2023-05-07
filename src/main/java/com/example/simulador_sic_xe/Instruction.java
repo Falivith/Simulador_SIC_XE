@@ -2,7 +2,7 @@ package com.example.simulador_sic_xe;
 
 public class Instruction {
 
-    private int format; // 1, 2, 3, 4
+    private int format; // 2, 3, 4
     private String mnemonic;
     private String address;
     private String addressingMode;

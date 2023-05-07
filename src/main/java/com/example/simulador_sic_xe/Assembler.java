@@ -23,7 +23,7 @@ public class Assembler {
     public static Loaded assemble(String asmPath) {
         System.out.println("-- Abrindo arquivo Assembly SIC/XE -- ");
 
-        HashMap<String, List<String>> instructionMap = createInstructionMap("src/main/java/com/example/simulador_sic_xe/samplecodes/instructions.txt");
+        HashMap<String, List<String>> instructionMap = Util.createInstructionMap("src/main/java/com/example/simulador_sic_xe/samplecodes/instructions.txt", false);
         HashMap<String, Integer> symbolTable = new HashMap<>();
         ArrayList<String> assembly = asmReader(asmPath);
 
@@ -45,10 +45,9 @@ public class Assembler {
         * */
 
         if(assembly.get(0).contains("START")){
-            System.out.println("-- Montando o cabeçalho --");
-
+            //System.out.println("-- Montando o cabeçalho --");
             LineDecode Buffer = wordSplit(assembly.get(0));
-            START = Integer.parseInt(Buffer.Operand, 16);
+            START = Integer.parseInt(Buffer.Operand);
             LOCCTR = START;
             symbolTable.put(Buffer.Label, LOCCTR);
             PNAME = Buffer.Label;
@@ -67,10 +66,7 @@ public class Assembler {
 
         while( !actual.OpCode.equals("END") ){
 
-            //System.out.println("LOCCTR: " + String.format("%06X", LOCCTR) + " " + actual.Label + " " + actual.OpCode + " " + actual.Operand);
-
             // Tabela de símbolos
-
             if(actual.Label != null && !actual.Label.isEmpty()){
                 if(symbolTable.containsKey(actual.Label)){
                     System.out.println("O Símbolo < " + actual.Label + " > já existe na tabela de símbolos.");
@@ -138,40 +134,67 @@ public class Assembler {
             actual.LOCCTR = LOCCTR;
         }
 
+        // Fim do programa (Gambiarra) =)
+
+        program.add(actual);
         printProgram(program);
 
-        // Fim do programa (Gambiarra) =)
-        LineDecode end = new LineDecode();
-        end.OpCode = "FF";
-        program.add(end);
+        // Passo 2 da montagem (Código OBJETO)
 
-        // Passo 2 da montagem
-
-        iterator = 1;
-        actual = wordSplit(assembly.get(iterator));
+        ArrayList<String> objCodeList = new ArrayList<>();
         String objCode = "";
 
         for (LineDecode line : program) {
 
-            String hexCode = null;
-            // Caso onde o OPCODE foi encontrado na tabela de instruções
-            if(instructionMap.get(line.OpCode) != null){
-                hexCode = instructionMap.get(line.OpCode).get(0);
-                // Verificação se o OPERANDO é NULO ou EXISTE
+            if(line.OpCode.equals("END")){
+                objCodeList.add("FFFFFF");
+                objCode += "FC" + "\n";
+                continue;
+            }
+
+            String lineObjCode = null;
+
+            switch (line.Format){
+                case 2:
+                    lineObjCode = assembleFormat2(line, instructionMap);
+                    if (lineObjCode == null) {
+                        System.out.println("Erro na montagem");
+                    }
+                    break;
+                case 3:
+                    lineObjCode = assembleFormat3(line, instructionMap, symbolTable);
+                    if (lineObjCode == null) {
+                        System.out.println("Erro na montagem");
+                    }
+                    break;
+                case 4:
+                    break;
+            }
+
+
+            // Diretivas
+            /*    if(lineObjCode != null)
+
                 if(line.Operand != null){
+                    // Endereçamento Direto
                     if(symbolTable.containsKey(line.Operand)){
-                        hexCode += String.format("%04X", symbolTable.get(actual.Operand));
+                        lineObjCode += String.format("%04X", symbolTable.get(actual.Operand));
+                    }
+                    // Endereçamento Imediato
+                    else{
+                        lineObjCode += String.format("%04X", (actual.Operand.substring(1)));
                     }
                 }
                 else
                     System.out.println(line.OpCode + " Não existe Operando.");
-            }
+
             // Caso seja diretiva Word
             else if(line.OpCode.equals("WORD")){
-                hexCode = String.format("%06X", symbolTable.get(line.Operand));
-            }
+                lineObjCode = String.format("%06X", symbolTable.get(line.Operand));
+            }*/
 
-            objCode += hexCode + "\n";
+            objCodeList.add(lineObjCode);
+            objCode += lineObjCode + "\n";
         }
 
         /*
@@ -201,11 +224,11 @@ public class Assembler {
             LOCCTR += 3;
         }
         */
-        
-        //System.out.println(objCode);
+
+        System.out.println(" -- Código Objeto -- \n" + objCode);
         writeObjCodeToFile(objCode);
 
-        return decodedProgram = new Loaded(START, 0, PNAME, (objCode.split("\n").length - 1), null);
+        return decodedProgram = new Loaded(START, PNAME, (objCode.split("\n").length - 1), program, objCodeList);
     }
 
     public static ArrayList<String> asmReader(String path){
@@ -230,7 +253,6 @@ public class Assembler {
 
         return asm;
     }
-
     public static void writeObjCodeToFile(String objCode) {
         File objFile = new File("out.obj");
         PrintWriter printWriterObjeto = null;
@@ -244,50 +266,16 @@ public class Assembler {
             e.printStackTrace();
         }
     }
-
     public static void printStringArray(String[] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.println(array[i]);
         }
     }
-
     public static void printSymbolTable(HashMap<String, Integer> SymTab){
         System.out.println("-- Tabela de Símbolos --");
         for (String instrucao : SymTab.keySet())
             System.out.println(instrucao + " = " + String.format("%06X", SymTab.get(instrucao)));
     }
-
-    public static HashMap<String, List<String>> createInstructionMap(String path) {
-        File file = new File(path);
-        HashMap<String, List<String>> mapa = new HashMap<>();
-
-        try {
-
-            Scanner leitor = new Scanner(file);
-
-            while (leitor.hasNextLine()) {
-                String linha = leitor.nextLine();
-
-                // divide a linha em duas partes: instrução, código e formato
-                String[] partes = linha.split(" ");
-
-                List<String> x = new ArrayList<>();
-                x.add(partes[1]);
-                x.add(partes[2]);
-
-                // adiciona a instrução e seu código ao HashMap
-                mapa.put(partes[0], x);
-            }
-
-            leitor.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado.");
-        }
-
-        return mapa;
-    }
-
     public static LineDecode wordSplit(String codeLine) {
         codeLine = codeLine.trim();
         String[] words = codeLine.split("\\s+"); // separa as palavras pelo espaço em branco
@@ -310,13 +298,125 @@ public class Assembler {
 
         return line;
     }
-
     public static void printProgram(List<LineDecode> program){
         for (LineDecode line: program) {
             System.out.println(
                     "LOCCTR: " + String.format("%06X", (line.LOCCTR))
           + " | " + "OPCODE: " + String.format("%-5s", line.OpCode)
           + " | " + "OPERAN: " + String.format("%-5s", line.Operand));
+        }
+    }
+    public static String assembleFormat2(LineDecode line, HashMap<String, List<String>> instructionMap){
+        String hexCode = null;
+        char addressMode;
+        int r1;
+        int r2;
+
+        if(instructionMap.get(line.OpCode) != null) {
+            hexCode = instructionMap.get(line.OpCode).get(0);
+        }
+        else {
+            System.out.println(line.OpCode + " Não existe essa instrução.");
+            return null;
+        }
+
+        if(line.Operand != null){
+
+            // Não precisa resolver o endereço pela tabela de símbolos pois é tipo 2
+
+            // Caso sejam 2 registradores passados
+            if(line.Operand.length() == 3){
+                r1 = chooseRegister(line.Operand.charAt(0));
+                r2 = chooseRegister(line.Operand.charAt(2));
+                hexCode += Integer.toString(r1);
+                hexCode += Integer.toString(r2);
+            }
+            else{
+                r1 = chooseRegister(line.Operand.charAt(0));
+                hexCode += Integer.toString(r1);
+                hexCode += '0';
+            }
+        }
+        else {
+            System.out.println(line.OpCode + " Não existe Operando.");
+            return null;
+        }
+
+        return hexCode;
+    }
+    public static String assembleFormat3(LineDecode line, HashMap<String, List<String>> instructionMap, HashMap<String, Integer> symbolTable){
+        String hexCode = null;
+        char addressMode;
+
+        if(instructionMap.get(line.OpCode) != null) {
+            hexCode = instructionMap.get(line.OpCode).get(0);
+        }
+
+        // Endereçamento Imediato (#)
+        if(line.Operand.charAt(0) == '#'){
+            hexCode = Util.changeBitsNI(hexCode, "Imediato");
+            hexCode += String.format("%04X", Integer.parseInt(line.Operand.substring(1)));
+            addressMode = '#';
+            // Endereçamento Indireto (@)
+        } else if(line.Operand.charAt(0) == '@') {
+            hexCode = Util.changeBitsNI(hexCode, "Indireto");
+            hexCode += String.format("%04X", (line.Operand.substring(1)));
+            addressMode = '@';
+        }
+        // Endereçamento Direto (Padrão)
+        else {
+            hexCode += String.format("%04X", (line.Operand));
+            addressMode = 'D';
+        }
+
+        return hexCode;
+    }
+    public static String assembleFormat4(LineDecode line, HashMap<String, List<String>> instructionMap, HashMap<String, Integer> symbolTable){
+        String hexCode = null;
+            if(instructionMap.get(line.OpCode) != null) {
+                hexCode = instructionMap.get(line.OpCode).get(0);
+            }
+        return hexCode;
+    }
+    public static int chooseRegister(char r){
+        switch (r){
+            case 'A': return 0;
+            case 'S': return 4;
+            case 'T': return 5;
+        }
+        return -1;
+    }
+    public static void loader(Memory memory, Loaded pInfo){
+        int baseAddress = pInfo.getStartingAddress();
+        List<String> objC = pInfo.getObjCode();
+
+        for (String line: objC) {
+            switch (line.length()){
+                case 4:
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(0, 2), 16));
+                    baseAddress += 1;
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(2, 4), 16));
+                    baseAddress += 1;
+                    break;
+                case 6:
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(0, 2), 16));
+                    baseAddress += 1;
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(2, 4), 16));
+                    baseAddress += 1;
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(4, 6), 16));
+                    baseAddress += 1;
+                    break;
+                case 8:
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(0, 2), 16));
+                    baseAddress += 1;
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(2, 4), 16));
+                    baseAddress += 1;
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(4, 6), 16));
+                    baseAddress += 1;
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(6, 8), 16));
+                    baseAddress += 1;
+                    break;
+            }
         }
     }
 }

@@ -28,28 +28,24 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         registers = new Registers();
         memory.addListener(this);
         registers.addListener(this);
-        Processor processor = new Processor(memory, registers);
 
-        Loaded x = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_3.asm");
-        System.out.println("");
-
+        Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_5.asm");
         loadMemoryView();
-        runButton.setOnAction(e -> runButtonClick());
 
+        runButton.setOnAction(e -> runButtonClick());
+        stepButton.setOnAction(e -> stepButtonClick());
+
+        Assembler.loader(memory, pInfo);
+        registers.getPC().setValue(pInfo.getStartingAddress());
+        processor = new Processor(memory, registers);
+    }
+
+    private void stepButtonClick(){
+        processor.step();
     }
 
     private void runButtonClick() {
-        memory.write(10, (byte) 0b00001110);
-        memory.write(1, (byte) 0b00000011);
-
-        registers.setA(150);
-        registers.setPC(memory.read(1));
-
-        Instructions.ADDR(registers.getB(), registers.getA());
-
-        System.out.println(registers.getA().getValue());
-
-        System.out.println("Perochons");
+        processor.run();
     }
 
     public void loadMemoryView(){
@@ -102,6 +98,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
             labelRegisterX, labelRegisterSW;
     @FXML private TextArea objectTextArea;
     @FXML private Button runButton;
+    @FXML private Button stepButton;
     @FXML private TableColumn<Memory16Row, String> tableColumnBaseAddress, tableColumn0, tableColumn1, tableColumn2,
             tableColumn3, tableColumn4, tableColumn5, tableColumn6, tableColumn7, tableColumn8, tableColumn9,
             tableColumnA, tableColumnB, tableColumnC, tableColumnD, tableColumnE;

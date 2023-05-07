@@ -70,6 +70,31 @@ public class Instructions {
         }
     }
 
+    public static void LDA(Registers registers, Memory memory, int op, String addressingMode){
+        if(addressingMode == "Imediato"){
+            registers.setA(op);
+        }
+        else if(addressingMode == "Indireto"){
+            // Implementar
+        }
+        else{
+            registers.setA(memory.read(op));
+        }
+    }
+
+    public static void LDS(Registers registers, Memory memory, int op, String addressingMode){
+        Register S = registers.getS();
+        if(addressingMode == "Imediato"){
+            S.setValue(op);
+        }
+        else if(addressingMode == "Indireto"){
+            // Implementar
+        }
+        else{
+            S.setValue(memory.read(op));
+        }
+    }
+
     // Tipo 2
     public static void ADDR(Register R2, Register R1) {
         R2.setValue(R1.getValue() + R2.getValue());

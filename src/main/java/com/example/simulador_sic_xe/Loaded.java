@@ -6,21 +6,29 @@ import java.util.List;
 
 class Loaded {
     private int startingAddress;
-    private int programSize;
     private int instructions_number;
-    private List<Instruction> instructions;
+    private List<LineDecode> instructions;
+    private List<String> objCode;
     private String program_name;
 
-    Loaded (int startAddr, int progSize, String program_name, int instrNumber, List<Instruction> instructions) {
+    Loaded (int startAddr, String program_name, int instrNumber, List<LineDecode> instructions, List<String> objCode) {
         this.startingAddress = startAddr;
-        this.programSize = progSize;
         this.instructions_number = instrNumber;
         this.instructions = instructions;
         this.program_name = program_name;
+        this.objCode = objCode;
     }
 
     Loaded (){
 
+    }
+
+    public List<String> getObjCode() {
+        return objCode;
+    }
+
+    public void setObjCode(List<String> objCode) {
+        this.objCode = objCode;
     }
 
     public int getStartingAddress() {
@@ -30,15 +38,6 @@ class Loaded {
     public void setStartingAddress(int startingAddress) {
         this.startingAddress = startingAddress;
     }
-
-    public int getProgramSize() {
-        return programSize;
-    }
-
-    public void setProgramSize(int programSize) {
-        this.programSize = programSize;
-    }
-
     public int getInstructions_number() {
         return instructions_number;
     }
@@ -47,11 +46,11 @@ class Loaded {
         this.instructions_number = instructions_number;
     }
 
-    public List<Instruction> getInstructions() {
+    public List<LineDecode> getInstructions() {
         return instructions;
     }
 
-    public void setInstructions(List<Instruction> instructions) {
+    public void setInstructions(List<LineDecode> instructions) {
         this.instructions = instructions;
     }
 

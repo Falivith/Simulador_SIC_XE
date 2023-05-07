@@ -88,7 +88,7 @@
             </HBox>
             <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
                <children>
-                  <Label text="Geral_1         (T) =" />
+                  <Label text="Geral_1         (S) =" />
                   <Label fx:id="labelRegisterS" text="000000">
                      <padding>
                         <Insets left="10.0" />
@@ -153,7 +153,7 @@
          </children>
       </VBox>
       <Label alignment="CENTER" layoutX="26.0" layoutY="308.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
-      <Button fx:id="runButton" layoutX="224.0" layoutY="312.0" mnemonicParsing="false" text="Executar" />
+      <Button fx:id="runButton" layoutX="230.0" layoutY="311.0" mnemonicParsing="false" text="Executar" />
       <TableView fx:id="tableViewMemory" fixedCellSize="0.0" layoutX="12.0" layoutY="342.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="519.0">
         <columns>
             <TableColumn fx:id="tableColumnBaseAddress" editable="false" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" reorderable="false" resizable="false" sortable="false" text="Base" />
@@ -178,5 +178,6 @@
          </columnResizePolicy>
       </TableView>
       <ListView fx:id="assemblyListView" editable="true" layoutX="14.0" layoutY="48.0" prefHeight="249.0" prefWidth="172.0" />
+      <Button fx:id="stepButton" layoutX="407.0" layoutY="311.0" mnemonicParsing="false" text="Avançar" />
    </children>
 </AnchorPane>

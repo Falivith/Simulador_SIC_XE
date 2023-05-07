@@ -3,23 +3,7 @@ package com.example.simulador_sic_xe;
 import java.util.ArrayList;
 import java.util.List;
 
-class Register {
-    int value;
-
-    Register(){
-        value = 0;
-    }
-
-    void setValue(int v){
-        value = v;
-    }
-
-    int getValue(){
-        return value;
-    }
-}
-
-public class Registers {
+public class Registers implements Register.RegisterListener {
     private Register A; // Acumulador
     private Register X; // Registrador de índice
     private Register L; // Registrador de ligação
@@ -41,6 +25,16 @@ public class Registers {
         this.T = new Register();
         this.PC = new Register();
         this.SW = new Register();
+
+        A.addListener(this);
+        X.addListener(this);
+        L.addListener(this);
+        B.addListener(this);
+        S.addListener(this);
+        T.addListener(this);
+        PC.addListener(this);
+        SW.addListener(this);
+
         listeners = new ArrayList<>();
     }
 
@@ -125,6 +119,11 @@ public class Registers {
         this.T.setValue(0);
         this.PC.setValue(0);
         this.SW.setValue(0);
+    }
+
+    @Override
+    public void onRegisterChange(Register register) {
+        notifyListeners();
     }
 
     public interface RegistersListener {

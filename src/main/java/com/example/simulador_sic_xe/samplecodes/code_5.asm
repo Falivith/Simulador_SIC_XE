@@ -1,4 +1,4 @@
-HELP__  START   0
+HELP__  START   16
 FIRST   LDA     #10
         LDS     #10
         ADDR    A,S
