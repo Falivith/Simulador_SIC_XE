@@ -147,7 +147,7 @@ public class Assembler {
         for (LineDecode line : program) {
 
             if(line.OpCode.equals("END")){
-                objCodeList.add("FFFFFF");
+                objCodeList.add("FC");
                 objCode += "FC" + "\n";
                 continue;
             }
@@ -392,6 +392,10 @@ public class Assembler {
 
         for (String line: objC) {
             switch (line.length()){
+                case 2: // Serve apenas pra END
+                    memory.write(baseAddress, (byte) Integer.parseInt(line.substring(0, 2), 16));
+                    baseAddress += 1;
+                    break;
                 case 4:
                     memory.write(baseAddress, (byte) Integer.parseInt(line.substring(0, 2), 16));
                     baseAddress += 1;

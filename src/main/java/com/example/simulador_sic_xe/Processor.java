@@ -49,6 +49,22 @@ public class Processor {
                         byteToTwoInts(BsecondByte);
                         Instructions.ADDR(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2));
                         break;
+                    case "CLEAR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.CLEAR(getRegisterFromNumber(registers, r1));
+                        break;
+                    case "COMPR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.COMPR(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2), registers.getSW());
+                        break;
+                    case "DIVR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.DIVR(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2));
+                        break;
+                    case "MULR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.MULR(getRegisterFromNumber(registers, r1), getRegisterFromNumber(registers, r2));
+                        break;
                 }
                 break;
             case "3":

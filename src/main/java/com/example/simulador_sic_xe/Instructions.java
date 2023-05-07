@@ -119,6 +119,10 @@ public class Instructions {
         R1.setValue(R1.getValue() / R2.getValue());
     }
 
+    public static void MULR(Register R1, Register R2){
+        R1.setValue(R1.getValue() * R2.getValue());
+    }
+
 
     private static byte[] extractWordFromInt(int num){
         byte[] word = new byte[3];
