@@ -40,6 +40,8 @@ public class Processor {
         format = instr.get(1);
         instruction = instr.get(0);
 
+        boolean jumpflag = false;
+
         setActualConfig();
 
         switch (format) {
@@ -81,6 +83,10 @@ public class Processor {
                         byteToTwoInts(BsecondByte);
                         Instructions.SHIFTR(getRegisterFromNumber(registers, r1));
                         break;
+                    case "TIXR":
+                        byteToTwoInts(BsecondByte);
+                        Instructions.TIXR(getRegisterFromNumber(registers, r1), registers);
+                        break;
                 }
                 break;
             case "3":
@@ -91,12 +97,57 @@ public class Processor {
                     case "LDS":
                         Instructions.LDS(registers, memory, operand, addressingMode);
                         break;
+                    case "LDT":
+                        Instructions.LDT(registers, memory, operand, addressingMode);
+                        break;
+                    case "LDX":
+                        Instructions.LDX(registers, memory, operand, addressingMode);
+                        break;
+                    case "LDB":
+                        Instructions.LDB(registers, memory, operand, addressingMode);
+                        break;
+                    case "LDL":
+                        Instructions.LDL(registers, memory, operand, addressingMode);
+                        break;
+                    case "LDCH":
+                        Instructions.LDCH(registers, memory, operand, addressingMode);
+                        break;
+                    case "STX":
+                        Instructions.STX(registers, memory, operand, addressingMode);
+                        break;
+                    case "STB":
+                        Instructions.STB(registers, memory, operand, addressingMode);
+                        break;
+                    case "STS":
+                        Instructions.STS(registers, memory, operand, addressingMode);
+                        break;
+                    case "STL":
+                        Instructions.STL(registers, memory, operand, addressingMode);
+                        break;
                     case "ADD":
                         Instructions.ADD(registers, memory, operand, addressingMode);
                         break;
                     case "J":
                         Instructions.J(registers, memory, operand, addressingMode);
-                        return;
+                        jumpflag = true;
+                        break;
+                    case "JEQ":
+                        jumpflag = Instructions.JEQ(registers, memory, operand, addressingMode);
+                        break;
+                    case "JGT":
+                        jumpflag = Instructions.JGT(registers, memory, operand, addressingMode);
+                        break;
+                    case "JLT":
+                        jumpflag = Instructions.JLT(registers, memory, operand, addressingMode);
+                        break;
+                    case "JSUB":
+                        Instructions.JSUB(registers, memory, operand, addressingMode);
+                        jumpflag = true;
+                        break;
+                    case "RSUB":
+                        Instructions.RSUB(registers, memory, operand, addressingMode);
+                        jumpflag = true;
+                        break;
                     case "STA":
                         Instructions.STA(registers, memory, operand, addressingMode);
                         break;
@@ -109,13 +160,17 @@ public class Processor {
                     case "DIV":
                         Instructions.DIV(registers, memory, operand, addressingMode);
                         break;
+                    case "TIX":
+                        Instructions.TIX(registers, memory, operand, addressingMode);
+                        break;
                     case "END":
                         System.out.println("O Programa terminou.");
                         break;
                 }
                 break;
         }
-        registers.getPC().setValue(registers.getPC().getValue() + Integer.parseInt(format));
+        if(!jumpflag)
+            registers.getPC().setValue(registers.getPC().getValue() + Integer.parseInt(format));
     }
 
     private Register getRegisterFromNumber(Registers registers, int n){

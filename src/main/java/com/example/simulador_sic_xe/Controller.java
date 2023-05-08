@@ -31,7 +31,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         memory.addListener(this);
         registers.addListener(this);
 
-        Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_4.asm");
+        Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/fibo.asm");
         fillAssembly(pInfo.getAssembly());
         fillObjCode((pInfo.getObjCode()));
         loadMemoryView();

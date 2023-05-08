@@ -112,7 +112,6 @@ public class Assembler {
                 }
             }
             else if(actual.OpCode.equals("WORD")){
-                actual.ObjectCode = String.format("%06X", Integer.parseInt(actual.Operand));
                 LOCCTR += 3;
             }
             else if(actual.OpCode.equals("RESW")){
@@ -182,10 +181,18 @@ public class Assembler {
             }
 
             if(line.OpCode.equals("WORD")){
+                if (line.Operand.charAt(0) == 'C') {
+                    lineObjCode = String.format("%06X", (int)(line.Operand.charAt(2)));
+                }
+                else
                 lineObjCode = String.format("%06X", Integer.parseInt(line.Operand));
             }
 
             if(line.OpCode.equals("BYTE")){
+                if (line.Operand.charAt(0) == 'C') {
+                    lineObjCode = String.format("%02X", (int)(line.Operand.charAt(2)));
+                }
+                else
                 lineObjCode = String.format("%02X", Integer.parseInt(line.Operand));
             }
 
@@ -224,6 +231,7 @@ public class Assembler {
 
         return asm;
     }
+
     public static void writeObjCodeToFile(String objCode) {
         File objFile = new File("out.obj");
         PrintWriter printWriterObjeto = null;
@@ -237,16 +245,19 @@ public class Assembler {
             e.printStackTrace();
         }
     }
+
     public static void printStringArray(String[] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.println(array[i]);
         }
     }
+
     public static void printSymbolTable(HashMap<String, Integer> SymTab){
         System.out.println("-- Tabela de Símbolos --");
         for (String instrucao : SymTab.keySet())
             System.out.println(instrucao + " = " + String.format("%06X", SymTab.get(instrucao)));
     }
+
     public static LineDecode wordSplit(String codeLine) {
         codeLine = codeLine.trim();
         String[] words = codeLine.split("\\s+"); // separa as palavras pelo espaço em branco
@@ -269,6 +280,7 @@ public class Assembler {
 
         return line;
     }
+
     public static void printProgram(List<LineDecode> program){
         for (LineDecode line: program) {
             System.out.println(
@@ -277,6 +289,7 @@ public class Assembler {
           + " | " + "OPERAN: " + String.format("%-5s", line.Operand));
         }
     }
+
     public static String assembleFormat2(LineDecode line, HashMap<String, List<String>> instructionMap){
         String hexCode = null;
         char addressMode;
@@ -315,6 +328,7 @@ public class Assembler {
 
         return hexCode;
     }
+
     public static String assembleFormat3(LineDecode line, HashMap<String, List<String>> instructionMap, HashMap<String, Integer> symbolTable){
         String hexCode = null;
         char addressMode;
@@ -342,6 +356,7 @@ public class Assembler {
 
         return hexCode;
     }
+
     public static String assembleFormat4(LineDecode line, HashMap<String, List<String>> instructionMap, HashMap<String, Integer> symbolTable){
         String hexCode = null;
             if(instructionMap.get(line.OpCode) != null) {
@@ -349,14 +364,19 @@ public class Assembler {
             }
         return hexCode;
     }
+
     public static int chooseRegister(char r){
         switch (r){
             case 'A': return 0;
+            case 'X': return 1;
+            case 'L': return 2;
+            case 'B': return 3;
             case 'S': return 4;
             case 'T': return 5;
         }
         return -1;
     }
+
     public static void loader(Memory memory, Loaded pInfo){
 
         int baseAddress = pInfo.getStartingAddress();

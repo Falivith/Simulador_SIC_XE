@@ -1,6 +1,6 @@
 HELP__  START   0
-FIRST   LDA     #10
-        DIV     BUFFER
+FIRST   ADD     #10
+        LDCH    BUFFER
         J       FINISH
-BUFFER  WORD    10
+BUFFER  BYTE    C'X'
 FINISH  END     FIRST
