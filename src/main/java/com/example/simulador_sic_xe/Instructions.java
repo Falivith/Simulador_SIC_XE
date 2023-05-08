@@ -17,36 +17,66 @@ public class Instructions {
             registers.setA(registers.getA().getValue() + value);
         }
     }
+    public static void AND(Registers registers, Memory memory, int op, String addressingMode) {
+        byte[] memValue = extractWordFromAddress(memory, op);
+        //System.out.println(memValue[0] + " " + memValue[1] + " " + memValue[2]);
 
-    public static void AND(Registers registers, Memory memory, int address) {
-        byte[] memValue = extractWordFromAddress(memory, address);
         byte[] regValue = extractWordFromInt(registers.getA().getValue());
-        byte[] result;
+        //System.out.println(regValue[0] + " " + regValue[1] + " " + regValue[2]);
 
-        // Implementar
-        registers.setA(memory.read(address));
+        byte[] result = new byte[3];
+
+        for (int i = 0; i < 3; i++) {
+            result[i] = (byte) (memValue[i] & regValue[i]);
+        }
+        registers.getA().setValue(convertWordToInt(result));
     }
 
-    public static void COMP(Registers registers, Memory memory, int address){
-        if(registers.getA().getValue() == memory.read(address)){
+    public static void COMP(Registers registers, Memory memory, int op, String addressingMode){
+        int memValue = convertWordToInt(extractWordFromAddress(memory, op));
+
+        if(registers.getA().getValue() == memValue){
             registers.setSW((int)'=');
             return;
         }
-        else if(registers.getA().getValue() < memory.read(address)){
+        else if(registers.getA().getValue() < memValue){
             registers.setSW((int)'<');
         }else{
             registers.setSW((int)'>');
         }
     }
 
-    public static void DIV(Registers registers, Memory memory, int address){
-        Register A = registers.getA();
-        A.setValue(A.getValue() / memory.read(address));
+    public static void DIV(Registers registers, Memory memory, int op, String addressingMode){
+        if(addressingMode == "Imediato"){
+            registers.setA(registers.getA().getValue() + op);
+        }
+        else if(addressingMode == "Indireto"){
+            // Implementar
+        }
+        else{
+            byte[] word = extractWordFromAddress(memory, op);
+            int value = convertWordToInt(word);
+
+            registers.setA(registers.getA().getValue() / value);
+        }
     }
 
     public static void J(Registers registers, Memory memory, int op, String addressingMode){
         Register PC = registers.getPC();
-        PC.setValue(op);
+
+        if(addressingMode == "Imediato"){
+            System.out.println("Imediato " + op);
+            PC.setValue(op);
+        }
+        else if(addressingMode == "Indireto"){
+            byte[] word = extractWordFromAddress(memory, op);
+            int value = convertWordToInt(word);
+            PC.setValue(value);
+        }
+        else{
+            System.out.println("Direto " + op);
+            PC.setValue(op);
+        }
     }
 
     public static void JEQ(Registers registers, Memory memory, int address){
@@ -89,7 +119,19 @@ public class Instructions {
             // Implementar
         }
         else{
-            registers.setA(memory.read(op));
+            registers.setA(convertWordToInt(extractWordFromAddress(memory, op)));
+        }
+    }
+
+    public static void STA(Registers registers, Memory memory, int op, String addressingMode){
+        if(addressingMode == "Imediato"){
+            generalStore(Util.convertIntToWord(registers.getA().getValue()), op, memory);
+        }
+        else if(addressingMode == "Indireto"){
+            // Implementar
+        }
+        else{
+            generalStore(Util.convertIntToWord(registers.getA().getValue()), op, memory);
         }
     }
 
@@ -154,6 +196,11 @@ public class Instructions {
         R1.setValue(R1.getValue() >> 2);
     }
 
+    public static void generalStore(byte[] word, int address, Memory memory){
+        memory.write(address + 0, word[2]);
+        memory.write(address + 1, word[1]);
+        memory.write(address + 2, word[0]);
+    }
     public static int convertWordToInt(byte[] word) {
         int valor = 0;
         valor |= (word[0] & 0xFF) << 16;

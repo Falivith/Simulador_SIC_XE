@@ -97,6 +97,18 @@ public class Processor {
                     case "J":
                         Instructions.J(registers, memory, operand, addressingMode);
                         return;
+                    case "STA":
+                        Instructions.STA(registers, memory, operand, addressingMode);
+                        break;
+                    case "AND":
+                        Instructions.AND(registers, memory, operand, addressingMode);
+                        break;
+                    case "COMP":
+                        Instructions.COMP(registers, memory, operand, addressingMode);
+                        break;
+                    case "DIV":
+                        Instructions.DIV(registers, memory, operand, addressingMode);
+                        break;
                     case "END":
                         System.out.println("O Programa terminou.");
                         break;

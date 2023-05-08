@@ -109,4 +109,12 @@ public class Util {
         String manipulatedHexString = String.format("%02X", b);
         return manipulatedHexString;
     }
+
+    public static byte[] convertIntToWord(int valor) {
+        byte[] word = new byte[3];
+        word[0] = (byte) (valor & 0xFF);
+        word[1] = (byte) ((valor >> 8) & 0xFF);
+        word[2] = (byte) ((valor >> 16) & 0xFF);
+        return word;
+    }
 }

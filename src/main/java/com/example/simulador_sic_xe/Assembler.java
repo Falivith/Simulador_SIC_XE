@@ -181,8 +181,6 @@ public class Assembler {
                     break;
             }
 
-            // Word
-
             if(line.OpCode.equals("WORD")){
                 lineObjCode = String.format("%06X", Integer.parseInt(line.Operand));
             }
@@ -194,34 +192,6 @@ public class Assembler {
             objCodeList.add(lineObjCode);
             objCode += lineObjCode + "\n";
         }
-
-        /*
-        while (!actual.OpCode.equals("END")) {
-
-            String hexCode = null;
-
-            // Se temos um OPCODE ou uma Diretiva de montador
-            if (instructionMap.containsKey(actual.OpCode)) {
-
-                String hexOpCode = instructionMap.get(actual.OpCode).get(0);
-                int tempOperand = 0;
-
-                // Se temos um operando
-                if (actual.Operand != null) {
-                    if (symbolTable.containsKey(actual.Operand))
-                        tempOperand = symbolTable.get(actual.Operand);
-                }
-                hexCode = hexOpCode + String.format("%04X", tempOperand);
-            } else if (actual.OpCode.equals("BYTE") || actual.OpCode.equals("WORD")) {
-                hexCode = String.format("%06X", Integer.parseInt(actual.Operand));
-            }
-
-            objCode += hexCode + "\n";
-
-            actual = wordSplit(assembly.get(++iterator));
-            LOCCTR += 3;
-        }
-        */
 
         System.out.println(" -- Código Objeto -- \n" + objCode + "\n");
         printSymbolTable(symbolTable);
@@ -366,7 +336,6 @@ public class Assembler {
         }
         // Endereçamento Direto (Padrão)
         else {
-            System.out.println(symbolTable.get(line.Operand));
             hexCode += String.format("%04X", symbolTable.get(line.Operand));
             addressMode = 'D';
         }

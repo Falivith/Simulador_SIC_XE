@@ -31,7 +31,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         memory.addListener(this);
         registers.addListener(this);
 
-        Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_5.asm");
+        Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/code_4.asm");
         fillAssembly(pInfo.getAssembly());
         fillObjCode((pInfo.getObjCode()));
         loadMemoryView();
@@ -73,6 +73,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
             tableColumnC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[12]));
             tableColumnD.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[13]));
             tableColumnE.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[14]));
+            tableColumnF.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().hexValues[15]));
         }
 
         int size = memory.getSize();
@@ -105,7 +106,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
     @FXML private Button stepButton;
     @FXML private TableColumn<Memory16Row, String> tableColumnBaseAddress, tableColumn0, tableColumn1, tableColumn2,
             tableColumn3, tableColumn4, tableColumn5, tableColumn6, tableColumn7, tableColumn8, tableColumn9,
-            tableColumnA, tableColumnB, tableColumnC, tableColumnD, tableColumnE;
+            tableColumnA, tableColumnB, tableColumnC, tableColumnD, tableColumnE, tableColumnF;
     @FXML private TableView<Memory16Row> tableViewMemory;
 
     // Métodos para atualizar a tabela conforme a memória for atualizada.

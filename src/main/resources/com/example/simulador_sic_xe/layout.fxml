@@ -10,12 +10,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="751.0" prefWidth="542.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.simulador_sic_xe.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="751.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.simulador_sic_xe.Controller">
    <children>
-      <Label alignment="CENTER" layoutX="32.0" layoutY="14.0" prefHeight="34.0" prefWidth="130.0" text="Assembly SIC/XE" />
-      <Label alignment="CENTER" layoutX="204.0" layoutY="14.0" prefHeight="34.0" prefWidth="130.0" text="Código Objeto" />
-      <Label alignment="CENTER" layoutX="371.0" layoutY="14.0" prefHeight="34.0" prefWidth="130.0" text="Registradores" />
-      <VBox layoutX="350.0" layoutY="48.0" prefHeight="257.0" prefWidth="172.0">
+      <Label alignment="CENTER" layoutX="53.0" layoutY="10.0" prefHeight="34.0" prefWidth="130.0" text="Assembly SIC/XE" />
+      <Label alignment="CENTER" layoutX="239.0" layoutY="10.0" prefHeight="34.0" prefWidth="130.0" text="Código Objeto" />
+      <Label alignment="CENTER" layoutX="422.0" layoutY="10.0" prefHeight="34.0" prefWidth="130.0" text="Registradores" />
+      <VBox layoutX="401.0" layoutY="40.0" prefHeight="257.0" prefWidth="172.0">
          <children>
             <HBox prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3; -fx-border-width: 2; -fx-border-color: #BDBDBD;">
                <children>
@@ -150,9 +150,9 @@
             </HBox>
          </children>
       </VBox>
-      <Label alignment="CENTER" layoutX="26.0" layoutY="308.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
-      <Button fx:id="runButton" layoutX="237.0" layoutY="311.0" mnemonicParsing="false" text="Executar" />
-      <TableView fx:id="tableViewMemory" fixedCellSize="0.0" layoutX="12.0" layoutY="342.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="519.0">
+      <Label alignment="CENTER" layoutX="47.0" layoutY="299.0" prefHeight="34.0" prefWidth="130.0" text="Memória" />
+      <Button fx:id="runButton" layoutX="274.0" layoutY="303.0" mnemonicParsing="false" text="Executar" />
+      <TableView fx:id="tableViewMemory" fixedCellSize="0.0" layoutX="23.0" layoutY="339.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="557.0">
         <columns>
             <TableColumn fx:id="tableColumnBaseAddress" editable="false" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" reorderable="false" resizable="false" sortable="false" text="Base" />
           <TableColumn fx:id="tableColumn0" editable="false" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="0" />
@@ -170,13 +170,14 @@
             <TableColumn fx:id="tableColumnC" editable="false" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="C" />
             <TableColumn fx:id="tableColumnD" editable="false" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="D" />
             <TableColumn fx:id="tableColumnE" editable="false" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="E" />
+            <TableColumn fx:id="tableColumnF" editable="false" maxWidth="-Infinity" minWidth="30.0" prefWidth="30.0" reorderable="false" resizable="false" sortable="false" text="F" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <ListView fx:id="assemblyListView" editable="true" layoutX="14.0" layoutY="48.0" prefHeight="249.0" prefWidth="172.0" />
-      <Button fx:id="stepButton" layoutX="407.0" layoutY="311.0" mnemonicParsing="false" text="Avançar" />
-      <ListView fx:id="objCodeListView" editable="true" layoutX="203.0" layoutY="48.0" prefHeight="249.0" prefWidth="130.0" />
+      <ListView fx:id="assemblyListView" editable="true" layoutX="32.0" layoutY="40.0" prefHeight="249.0" prefWidth="172.0" />
+      <Button fx:id="stepButton" layoutX="458.0" layoutY="303.0" mnemonicParsing="false" text="Avançar" />
+      <ListView fx:id="objCodeListView" editable="true" layoutX="225.0" layoutY="40.0" prefHeight="249.0" prefWidth="158.0" />
    </children>
 </AnchorPane>
