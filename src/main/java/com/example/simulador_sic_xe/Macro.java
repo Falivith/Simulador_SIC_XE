@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 class lineComponents{
@@ -39,25 +38,23 @@ class lineComponents{
 public class Macro {
 
     ArrayList<String> namTab = new ArrayList<>();
+    HashMap<String, String> substituitions = new HashMap<>();
     HashMap<String, String> defTab = new HashMap<>();
+    ArrayList<String> argTab = new ArrayList<>();
     File file;
     Scanner leitor;
     lineComponents actualLineFromFile;
     boolean expanding = false;
     String newAsm = new String();
+    int level = 0;
+    int linhaNumber = 0;
 
     public void macroProcessing() {
 
         System.out.println("-- Iniciando processamento de MACROS SIC/XE -- ");
 
-        /*ArrayList<lineComponents> assembly_ = new ArrayList<>();
-
-        for (String line: assembly) {
-            assembly_.add(wordSplit(line));
-        }*/
-
-        // begin (macro processor)
-        getNextLine();
+        getNextLineInterface();
+        newAsm += actualLineFromFile.line + "\n";
 
         while(!actualLineFromFile.opCode.equals("END")){
 
@@ -65,16 +62,19 @@ public class Macro {
             processLine();
 
         }
+        System.out.println("Final " + newAsm);
+
         return;
     }
 
     public void getLine(){
         if(expanding){
-            //get next line of macro def...
-            // substitute args from argtab...
+            System.out.println("Expandindo");
+            // pega a nova linha da macro na tabela de definição
+            // vai substituindos os argumentos
         }
         else{
-            getNextLine();
+            getNextLineInterface();
         }
     }
 
@@ -84,20 +84,45 @@ public class Macro {
         } else if (actualLineFromFile.opCode.equals("MACRO")) {
             define();
         } else {
-            System.out.println("Só replicando pro arquivo final");
-            newAsm += "\n" + actualLineFromFile;
+            newAsm += actualLineFromFile.line + "\n";
         }
     }
 
     public void define(){
+        lineComponents macroDefLine = actualLineFromFile;
 
+        namTab.add(macroDefLine.label);
+        defTab.put(macroDefLine.label, macroDefLine.line);
+        level = 1;
+
+        while (level > 0){
+            getLine();
+            if(!(actualLineFromFile.line.isEmpty() || actualLineFromFile.line.isBlank())){
+
+                // Adiciona a linha na tabela de definição
+                String temp = defTab.get(macroDefLine.label);
+                temp += "\n" + actualLineFromFile.line + "\n";
+                defTab.put(macroDefLine.label, temp);
+
+                if (actualLineFromFile.opCode.equals("MACRO")) {
+                    level++;
+                }else if (actualLineFromFile.opCode.equals("MEND")){
+                    level--;
+                }
+            }
+        }
     }
 
     public void expand(){
         expanding = true;
+        String firstLine = defTab.get(actualLineFromFile.opCode);
+        argTab = splitArgs(actualLineFromFile.operand);
+        newAsm += defTab.get(actualLineFromFile.opCode) + "\n";
+
+        expanding = false;
     }
 
-    public lineComponents getNextLine(){
+    public lineComponents getNextLineInterface(){
         actualLineFromFile = new lineComponents(leitor.nextLine());
         return actualLineFromFile;
     }
@@ -109,5 +134,14 @@ public class Macro {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private ArrayList <String> splitArgs(String args){
+        String[] elementos = args.split(",");
+        ArrayList<String> lista = new ArrayList<String>();
+        for (String elemento : elementos) {
+            lista.add(elemento);
+        }
+        return lista;
     }
 }
