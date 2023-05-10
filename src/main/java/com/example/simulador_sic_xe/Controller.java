@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         registers.addListener(this);
 
         Loaded pInfo = Assembler.assemble("src/main/java/com/example/simulador_sic_xe/samplecodes/fibo.asm");
+
         fillAssembly(pInfo.getAssembly());
         fillObjCode((pInfo.getObjCode()));
         loadMemoryView();
@@ -42,6 +44,9 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         Assembler.loader(memory, pInfo);
         registers.getPC().setValue(pInfo.getStartingAddress());
         processor = new Processor(memory, registers);
+
+            Macro macroprocessador = new Macro("src/main/java/com/example/simulador_sic_xe/samplecodes/macro_1.asm");
+            macroprocessador.macroProcessing();
     }
 
     private void stepButtonClick(){
