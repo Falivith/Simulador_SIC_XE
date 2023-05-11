@@ -2,9 +2,8 @@ package com.example.simulador_sic_xe;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.*;
 
 class lineComponents{
     String line;
@@ -33,19 +32,36 @@ class lineComponents{
                 break;
         }
     }
+
+    public void setOperand(String newOperand){
+        operand = newOperand;
+
+        if (label == null || label.isBlank() || label.isBlank()){
+            line = "\t\t" + opCode + "\t\t" + operand;
+        }else{
+            line = label + "\t" + opCode + "\t\t" + operand;
+        }
+    }
 }
 
 public class Macro {
 
     ArrayList<String> namTab = new ArrayList<>();
+    ArrayList<String> argTab = new ArrayList<>();
+    ArrayList<String> argTabMacro = new ArrayList<>();
+
     HashMap<String, String> substituitions = new HashMap<>();
     HashMap<String, String> defTab = new HashMap<>();
-    ArrayList<String> argTab = new ArrayList<>();
+    HashMap<String, String> exchange = new HashMap<>();
+
     File file;
     Scanner leitor;
-    lineComponents actualLineFromFile;
+
     boolean expanding = false;
     String newAsm = new String();
+    lineComponents actualLineFromFile;
+
+    String macroAtual;
     int level = 0;
     int linhaNumber = 0;
 
@@ -58,7 +74,7 @@ public class Macro {
 
         while(!actualLineFromFile.opCode.equals("END")){
 
-            getLine();
+            getLine(0);
             processLine();
 
         }
@@ -67,11 +83,24 @@ public class Macro {
         return;
     }
 
-    public void getLine(){
+    public void getLine(int index){
         if(expanding){
-            System.out.println("Expandindo");
-            // pega a nova linha da macro na tabela de definição
-            // vai substituindos os argumentos
+
+            String[] linhasMacro = separarLinhas(defTab.get(macroAtual));
+            //System.out.println("Expandindo " + linhasMacro[index]);
+
+            actualLineFromFile = new lineComponents(linhasMacro[index]);
+
+            // Se a linha tem algo a ser substituído
+            if (actualLineFromFile.operand.contains("&")){
+                for (Map.Entry<String, String> entrada : exchange.entrySet()) {
+                    String chave = entrada.getKey();
+                    String valor = entrada.getValue();
+                    actualLineFromFile.setOperand(actualLineFromFile.operand.replace(chave, valor));
+                }
+            }
+
+            System.out.println("Resultado " + actualLineFromFile.operand);
         }
         else{
             getNextLineInterface();
@@ -89,6 +118,7 @@ public class Macro {
     }
 
     public void define(){
+
         lineComponents macroDefLine = actualLineFromFile;
 
         namTab.add(macroDefLine.label);
@@ -96,12 +126,12 @@ public class Macro {
         level = 1;
 
         while (level > 0){
-            getLine();
+            getLine(0);
             if(!(actualLineFromFile.line.isEmpty() || actualLineFromFile.line.isBlank())){
 
                 // Adiciona a linha na tabela de definição
                 String temp = defTab.get(macroDefLine.label);
-                temp += "\n" + actualLineFromFile.line + "\n";
+                temp += "\n" + actualLineFromFile.line;
                 defTab.put(macroDefLine.label, temp);
 
                 if (actualLineFromFile.opCode.equals("MACRO")) {
@@ -115,10 +145,35 @@ public class Macro {
 
     public void expand(){
         expanding = true;
-        String firstLine = defTab.get(actualLineFromFile.opCode);
-        argTab = splitArgs(actualLineFromFile.operand);
-        newAsm += defTab.get(actualLineFromFile.opCode) + "\n";
 
+        macroAtual = actualLineFromFile.opCode;
+        String[] linhasMacro = separarLinhas(defTab.get(macroAtual));
+        lineComponents prototipoMacro = new lineComponents(linhasMacro[0]);
+
+        // Seta as variáveis internas da macro
+        argTabMacro = splitArgs(prototipoMacro.operand);
+
+        // Seta os argumentos para substituir
+        argTab = splitArgs(actualLineFromFile.operand);
+
+        if(argTabMacro.size() != argTab.size()){
+            throw new RuntimeException("Inconsistência na contagem dos argumentos.");
+        }
+
+        // Pareamento de cada variável com cada argumento
+        for (int i = 0; i < argTab.size(); i++){
+            exchange.put(argTabMacro.get(i), argTab.get(i));
+        }
+
+        System.out.println("Macro Invocation");
+
+        for (int i = 1; i < linhasMacro.length - 1; i++){
+            getLine(i);
+            processLine();
+        }
+
+        argTab.clear(); // Tem que ver isso aqui
+        argTabMacro.clear(); // Tem que ver isso aqui
         expanding = false;
     }
 
@@ -143,5 +198,10 @@ public class Macro {
             lista.add(elemento);
         }
         return lista;
+    }
+
+    private static String[] separarLinhas(String string) {
+        String[] linhas = string.split("\\r?\\n"); // ou string.split("\\r\\n") dependendo do formato da quebra de linha
+        return linhas;
     }
 }
