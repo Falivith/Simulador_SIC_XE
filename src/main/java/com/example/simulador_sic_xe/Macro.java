@@ -48,9 +48,9 @@ class lineComponents{
 public class Macro {
 
     ArrayList<String> namTab = new ArrayList<>();
+
     ArrayList<String> argTab = new ArrayList<>();
     ArrayList<String> argTabMacro = new ArrayList<>();
-
     HashMap<String, String> substituitions = new HashMap<>();
     HashMap<String, String> defTab = new HashMap<>();
     HashMap<String, String> exchange = new HashMap<>();
@@ -164,12 +164,22 @@ public class Macro {
             throw new RuntimeException("Inconsistência na contagem dos argumentos.");
         }
 
+        for (Map.Entry<String, String> entry : exchange.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if(argTab.indexOf(value) != -1){
+                exchange.put(argTabMacro.get(argTab.indexOf(value)), value);
+            }
+        }
         // Pareamento de cada variável com cada argumento
         for (int i = 0; i < argTab.size(); i++){
             exchange.put(argTabMacro.get(i), argTab.get(i));
         }
 
         System.out.println("Macro Invocation");
+
+        printArrayList(argTab);
+        printArrayList(argTabMacro);
 
         for (int i = 1; i < linhasMacro.length - 1; i++){
             getLine(i);
@@ -207,6 +217,12 @@ public class Macro {
     private static String[] separarLinhas(String string) {
         String[] linhas = string.split("\\r?\\n"); // ou string.split("\\r\\n") dependendo do formato da quebra de linha
         return linhas;
+    }
+
+    public void printArrayList(ArrayList<String> arrayList) {
+        for (String element : arrayList) {
+            System.out.println(element);
+        }
     }
 
     private static void storeMacroDefinitions(HashMap<String, String> dt, String nomearq){

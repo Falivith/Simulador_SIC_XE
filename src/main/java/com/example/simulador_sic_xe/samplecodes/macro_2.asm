@@ -3,14 +3,14 @@ _MAC2_  START   0
 SIGMA   MACRO   &ALO
         CLEAR   X
         LDS     #1
-        LDT     $ALO
+        LDT     &ALO
         MEND
 
 EXMAC   MACRO   &VAL1,&VAL2,&VAL3
         STS     &VAL1
         STT     &VAL2
         STA     &VAL3
-        SIGMA   $VAL1
+        SIGMA   &VAL1
         MEND
 
 FIRST   STL     TEST
