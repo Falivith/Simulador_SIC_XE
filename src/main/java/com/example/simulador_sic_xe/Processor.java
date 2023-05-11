@@ -15,6 +15,7 @@ public class Processor {
     int operand;
     int r1;
     int r2;
+    boolean endflag = false;
 
     public Processor(Memory memory, Registers registers) {
         this.registers = registers;
@@ -23,16 +24,20 @@ public class Processor {
     }
 
     public void run() {
-
+        while(!endflag){
+            step();
+        }
     }
 
     public void step() {
-        clearProcessor();
+        if(!endflag){
+            clearProcessor();
 
-        BfirstByte = memory.read(registers.getPC().getValue());
-        firstByte = Util.byteToHex(memory.read(registers.getPC().getValue()));
+            BfirstByte = memory.read(registers.getPC().getValue());
+            firstByte = Util.byteToHex(memory.read(registers.getPC().getValue()));
 
-        decodeInstruction(instructionMap.get(Util.instructionCleaner(firstByte)));
+            decodeInstruction(instructionMap.get(Util.instructionCleaner(firstByte)));
+        }
     }
 
     private void decodeInstruction(List<String> instr) {
@@ -164,7 +169,8 @@ public class Processor {
                         Instructions.TIX(registers, memory, operand, addressingMode);
                         break;
                     case "END":
-                        System.out.println("O Programa terminou.");
+                        System.out.println("||||||||||||| O Programa terminou! ||||||||||||| ");
+                        endflag = true;
                         break;
                 }
                 break;

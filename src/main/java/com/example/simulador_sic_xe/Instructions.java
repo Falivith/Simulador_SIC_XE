@@ -71,8 +71,8 @@ public class Instructions {
 
         int memValue = convertWordToInt(extractWordFromAddress(memory, op));
 
-        System.out.println("Memória: " + memValue);
-        System.out.println("Regis X: " + X.getValue());
+        //System.out.println("Memória: " + memValue);
+        //System.out.println("Regis X: " + X.getValue());
 
         if(X.getValue() == memValue){
             SW.setValue((int)'=');

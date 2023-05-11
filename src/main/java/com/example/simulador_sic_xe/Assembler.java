@@ -204,7 +204,7 @@ public class Assembler {
         printSymbolTable(symbolTable);
         System.out.println();
 
-        writeObjCodeToFile(objCode);
+        writeObjCodeToFile(objCode, "out.txt");
 
         return decodedProgram = new Loaded(START, PNAME, (objCode.split("\n").length - 1), program, objCodeList, assembly);
     }
@@ -232,8 +232,8 @@ public class Assembler {
         return asm;
     }
 
-    public static void writeObjCodeToFile(String objCode) {
-        File objFile = new File("out.obj");
+    public static void writeObjCodeToFile(String objCode, String nomearq) {
+        File objFile = new File(nomearq);
         PrintWriter printWriterObjeto = null;
 
         try {

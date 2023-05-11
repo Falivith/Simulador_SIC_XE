@@ -45,7 +45,7 @@ public class Controller implements Initializable , Memory.MemoryListener, Regist
         registers.getPC().setValue(pInfo.getStartingAddress());
         processor = new Processor(memory, registers);
 
-            Macro macroprocessador = new Macro("src/main/java/com/example/simulador_sic_xe/samplecodes/macro_1.asm");
+            Macro macroprocessador = new Macro("src/main/java/com/example/simulador_sic_xe/samplecodes/macro_2.asm");
             macroprocessador.macroProcessing();
     }
 

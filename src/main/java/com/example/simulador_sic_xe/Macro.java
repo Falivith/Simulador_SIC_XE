@@ -2,6 +2,7 @@ package com.example.simulador_sic_xe;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -79,6 +80,8 @@ public class Macro {
 
         }
         System.out.println("Final " + newAsm);
+        Assembler.writeObjCodeToFile(newAsm, "expanded.asm");
+        storeMacroDefinitions(defTab, "definitions.txt");
 
         return;
     }
@@ -100,7 +103,7 @@ public class Macro {
                 }
             }
 
-            System.out.println("Resultado " + actualLineFromFile.operand);
+            //System.out.println("Resultado " + actualLineFromFile.operand);
         }
         else{
             getNextLineInterface();
@@ -113,6 +116,7 @@ public class Macro {
         } else if (actualLineFromFile.opCode.equals("MACRO")) {
             define();
         } else {
+            if(!actualLineFromFile.line.isBlank())
             newAsm += actualLineFromFile.line + "\n";
         }
     }
@@ -172,8 +176,8 @@ public class Macro {
             processLine();
         }
 
-        argTab.clear(); // Tem que ver isso aqui
-        argTabMacro.clear(); // Tem que ver isso aqui
+        //argTab.clear(); // Tem que ver isso aqui
+        //argTabMacro.clear(); // Tem que ver isso aqui
         expanding = false;
     }
 
@@ -203,5 +207,26 @@ public class Macro {
     private static String[] separarLinhas(String string) {
         String[] linhas = string.split("\\r?\\n"); // ou string.split("\\r\\n") dependendo do formato da quebra de linha
         return linhas;
+    }
+
+    private static void storeMacroDefinitions(HashMap<String, String> dt, String nomearq){
+
+        File defFile = new File(nomearq);
+        PrintWriter printWriterObjeto = null;
+
+        try {
+            printWriterObjeto = new PrintWriter(defFile);
+
+            for (Map.Entry<String, String> entrada : dt.entrySet()) {
+                String chave = entrada.getKey();
+                String valor = entrada.getValue();
+                printWriterObjeto.print(valor + "\n\n");
+            }
+
+            printWriterObjeto.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
