@@ -3,10 +3,10 @@ FIRST   STL     TEST
 		STS		TEST1
 		STT		TEST2
 		STA		TEST3
-        CLEAR   X
-        LDS     #1
+CLEAR   X
+LDS     #1
 		LDT		TEST1
-        J       FINISH
+J       FINISH
 TEST    WORD    10
 TEST1   WORD    1
 TEST2   WORD    2

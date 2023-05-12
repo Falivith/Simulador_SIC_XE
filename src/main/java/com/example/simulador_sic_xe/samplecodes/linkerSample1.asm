@@ -1,0 +1,8 @@
+LINKER  START   0
+
+FIRST   STA     TEST1
+        STT     BLAU
+        J       FINISH
+
+TEST1   WORD    1
+FINISH  END     FIRST

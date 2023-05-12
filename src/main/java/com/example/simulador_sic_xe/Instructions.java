@@ -8,7 +8,11 @@ public class Instructions {
             registers.setA(registers.getA().getValue() + op);
         }
         else if(addressingMode == "Indireto"){
-            // Implementar
+            byte[] word = extractWordFromAddress(memory, op);
+            int address = convertWordToInt(word);
+            byte[] indirectWord = extractWordFromAddress(memory, address);
+            int value = convertWordToInt(indirectWord);
+            registers.setA(registers.getA().getValue() + value);
         }
         else{
             byte[] word = extractWordFromAddress(memory, op);
