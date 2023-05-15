@@ -8,6 +8,7 @@ O projeto possui as seguintes funcionalidades:
 
 - Máquina virtual que interpreta e executa códigos em assembly;
 - Montador que converte códigos em assembly para o formato executável da máquina virtual;
+- Processador de Macros que expande macros simples e aninhadas em Assembly SIC/XE;
 - Suporte para as principais instruções e diretivas da linguagem assembly da arquitetura SIC Extended (SIC_XE).
 
 ## Instruções de uso
