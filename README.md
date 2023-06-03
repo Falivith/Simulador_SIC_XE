@@ -29,7 +29,7 @@ Para utilizar o projeto, siga as instruções abaixo:
       <h3><a href="https://github.com/CeciliaBotelho">Cecilia Botelho</a></h3>
     </td>
     <td align="center">
-      <a href="https://github.com/Falivith"><img src="https://media.licdn.com/dms/image/C4D03AQEkIzD6sgWsYw/profile-displayphoto-shrink_800_800/0/1648139991799?e=1684972800&v=beta&t=RNmQNh40s5jPWVfPwdLH8JnrV3_ws-XQ39_S0_rZ_cA" alt="Foto do perfil" width="100" height="100"></a>
+      <a href="https://github.com/Falivith"><img src="https://media.licdn.com/dms/image/C4D03AQEkIzD6sgWsYw/profile-displayphoto-shrink_800_800/0/1648139991799?e=1691020800&v=beta&t=ag1J0C3hbsuthrMRzAttf0gF4j3vI-zlEje6B9l3IeU" alt="Foto do perfil" width="100" height="100"></a>
       <h3><a href="https://github.com/falivith">Gabriel Ramires</a></h3>
     </td>
     <td align="center">
