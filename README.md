@@ -25,11 +25,11 @@ Para utilizar o projeto, siga as instruções abaixo:
 <table align="center">
     <tr>
     <td align="center">
-      <a href="https://github.com/CeciliaBotelho"><img src="https://media.licdn.com/dms/image/D5603AQHNEiQQ2x8h9w/profile-displayphoto-shrink_200_200/0/1681397716975?e=1702512000&v=beta&t=-ydIPHf_Heytd_zG1iVEHZq9k-OsJw5mPMqUylb4m4E" alt="Foto do perfil" width="100" height="100"></a>
+      <a href="https://github.com/CeciliaBotelho"><img src="https://media.licdn.com/dms/image/D5603AQHNEiQQ2x8h9w/profile-displayphoto-shrink_200_200/0/1681397721743?e=1710374400&v=beta&t=EWnnoxUTXPYFN4_1KaGDc1tnYR7fNXLBkOWhPBWpoFg" alt="Foto do perfil" width="100" height="100"></a>
       <h3><a href="https://github.com/CeciliaBotelho">Cecilia Botelho</a></h3>
     </td>
     <td align="center">
-      <a href="https://github.com/Falivith"><img src="https://media.licdn.com/dms/image/C4D03AQEkIzD6sgWsYw/profile-displayphoto-shrink_200_200/0/1648139991799?e=1702512000&v=beta&t=blxElwfYBMR5QSnRIOUlEECGqovoolSIqSC-fbWvhZU" alt="Foto do perfil" width="100" height="100"></a>
+      <a href="https://github.com/Falivith"><img src="https://media.licdn.com/dms/image/C4D03AQEkIzD6sgWsYw/profile-displayphoto-shrink_200_200/0/1648139992202?e=1710374400&v=beta&t=xYK788XnM3VpkCQsoa3qKysOKIi2UMEQNHp3PCfu4IM" alt="Foto do perfil" width="100" height="100"></a>
       <h3><a href="https://github.com/falivith">Gabriel Ramires</a></h3>
     </td>
     <td align="center">
