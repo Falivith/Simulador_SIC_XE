@@ -25,7 +25,7 @@ Para utilizar o projeto, siga as instruções abaixo:
 <table align="center">
     <tr>
     <td align="center">
-      <a href="https://github.com/CeciliaBotelho"><img src="https://media.licdn.com/dms/image/v2/D4D03AQHYrcthxpR-PQ/profile-displayphoto-shrink_800_800/B4DZWi7nhnG8Ac-/0/1742195292625?e=1750291200&v=beta&t=LrjpMvlrzUc10C6bTaVvtpaWybrb-ZsISzakQF71bws" alt="Foto do perfil" width="100" height="100"></a>
+      <a href="https://github.com/CeciliaBotelho"><img src="https://media.licdn.com/dms/image/v2/D4D03AQEuP94ah-hfgw/profile-displayphoto-shrink_800_800/B4DZWlVvz0G4Ac-/0/1742235698490?e=1750291200&v=beta&t=OsKUpI_6LBiBzVZRC75XPzG0Cw84eWktEEUQ7M6Yf2c" alt="Foto do perfil" width="100" height="100"></a>
       <h3><a href="https://github.com/CeciliaBotelho">Cecilia Botelho</a></h3>
     </td>
     <td align="center">
